@@ -1,9 +1,10 @@
 from django.urls import path
 from rest_framework.urlpatterns import format_suffix_patterns
-from .views import RegisterAPI
+from .views import RegisterAPI, LoginAPI
 
 urlpatterns = [
     path('user/', RegisterAPI.as_view()),
+    path('user/login/', LoginAPI.as_view()),
     # path('auth/<int:pk>/', views.snippet_detail),
 ]
 
