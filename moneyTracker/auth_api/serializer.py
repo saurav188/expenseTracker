@@ -22,7 +22,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         }
 
     def validate(self, attrs):
-        if attrs['password'] != attrs['password2']:
+        if 'password' in attrs.keys() and attrs['password'] != attrs['password2']:
             raise serializers.ValidationError({"password": "Password fields didn't match."})
 
         return attrs
@@ -43,6 +43,42 @@ class RegistrationSerializer(serializers.ModelSerializer):
             user.profile_picture = validated_data['profile_picture']
         
         user.set_password(validated_data['password'])
+        user.save()
+
+        return user
+
+class UserUpdateSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all())])
+
+    class Meta:
+        model = User
+        fields = ('username', 'password', 'password2', 'email', 'first_name', 'last_name', 'address', 'phone_no', 'profile_picture')
+
+    def validate(self, attrs):
+        if attrs['password'] and attrs['password'] != attrs['password2']:
+            raise serializers.ValidationError({"password": "Password fields didn't match."})
+
+        return attrs
+
+    def create(self, validated_data):
+        user = User.objects.get(id = validated_data['id'])
+        
+        if validated_data['username']:
+            user.username = validated_data['username']
+        if validated_data['email']:
+            user.email = validated_data['email']
+        if validated_data['first_name']:
+            user.first_name = validated_data['first_name']
+        if validated_data['last_name']:
+            user.last_name = validated_data['last_name']
+        if validated_data['phone_no']:
+            user.phone_no = validated_data['phone_no']
+        if validated_data['address']:
+            user.address = validated_data['address']
+        if validated_data.get('profile_picture'):
+            user.profile_picture = validated_data['profile_picture']
+        if validated_data.get('password'):
+            user.set_password(validated_data['password'])
         user.save()
 
         return user
