@@ -37,6 +37,10 @@ class UserDetailAPI(APIView):
         serializer.save()
         return Response({"status":True,"message":"user detail successfully updated"}, status=status.HTTP_201_CREATED)
 
+    def delete(self, request, pk, format=None):
+        request.user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 # user login : api/auth/user/login/
 class LoginAPI(APIView):
     def post(self, request, format=None):
