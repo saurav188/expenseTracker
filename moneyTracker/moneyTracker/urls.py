@@ -17,9 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from auth_api import urls as auth_api_urls
+from account_management_api import urls as acc_mgmt_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/auth/', include(auth_api_urls)),
+    path('api/acc/', include(acc_mgmt_urls)),
     path('api-auth/', include('rest_framework.urls')),
 ]
