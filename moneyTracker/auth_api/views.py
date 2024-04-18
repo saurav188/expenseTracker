@@ -21,7 +21,7 @@ class RegisterAPI(APIView):
         serializer.save()
         return Response({"status":True,"message":"user registered successfully"}, status=status.HTTP_201_CREATED)
 
-# user creation : api/auth/user/detail/
+# user detail : api/auth/user/detail/
 class UserDetailAPI(APIView):
     authentication_classes = [TokenAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]

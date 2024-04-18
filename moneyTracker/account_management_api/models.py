@@ -4,14 +4,14 @@ from django.utils.translation import gettext as _
 
 class Account(models.Model):
     user_id = models.ForeignKey("auth.User", verbose_name=_("Owner"), on_delete=models.CASCADE)
-    name = models.CharField(max_length=200)
-    description = models.TextField(_("Description"))
-    balance = models.FloatField(_("Balance"))
-    show_card = models.BooleanField(_("Show Card"))
-    show_pie = models.BooleanField(_("Show Pie Chart"))
-    show_line = models.BooleanField(_("Show in Line Chart"))
-    theme_color_hash = models.CharField(_("Theme Color"), max_length=7)
-    theme_icon_fa_class = models.CharField(_("Theme Icon FA class"), max_length=50)
+    name = models.CharField(max_length=200, unique=True)
+    description = models.TextField(_("Description"), null=True, blank=True)
+    balance = models.FloatField(_("Balance"), default=0)
+    show_card = models.BooleanField(_("Show Card"), default=False)
+    show_pie = models.BooleanField(_("Show Pie Chart"), default=False)
+    show_line = models.BooleanField(_("Show in Line Chart"), default=False)
+    theme_color_hash = models.CharField(_("Theme Color"), max_length=7, null=True, blank=True, unique=True)
+    theme_icon_fa_class = models.CharField(_("Theme Icon FA class"), max_length=50, null =True)
 
     SAVINGS = "SVG"
     CHECKING = "CHK"
@@ -33,9 +33,9 @@ class Account(models.Model):
 
 class Category(models.Model):
     user_id = models.ForeignKey("auth.User", verbose_name=_("Owner"), on_delete=models.CASCADE)
-    name = models.CharField(max_length=200)
-    description = models.TextField(_("Description"))
-    theme_color_hash = models.CharField(_("Theme Color"), max_length=7)
+    name = models.CharField(max_length=200, unique=True)
+    description = models.TextField(_("Description"), null=True, blank=True)
+    theme_color_hash = models.CharField(_("Theme Color"), max_length=7, null=True, blank=True, unique=True)
 
     INCOME = "INC"
     EXPENSE = "EXP"
@@ -68,7 +68,7 @@ class Transaction(models.Model):
     account_id = models.ForeignKey("account_management_api.Account", verbose_name=_("Account"), on_delete=models.CASCADE)
     category_id = models.ForeignKey("account_management_api.Category", verbose_name=_("Category"), on_delete=models.CASCADE)
     amount = models.IntegerField(_("Amount"))
-    note = models.TextField(_("Note"))
+    note = models.TextField(_("Note"), null=True, blank=True)
 
     class Meta:
         verbose_name = _("Transaction")
