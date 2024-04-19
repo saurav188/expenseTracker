@@ -61,3 +61,45 @@ class AccountSerializer(serializers.ModelSerializer):
             account.theme_icon_fa_class = validated_data['theme_icon_fa_class']
             
         return account
+
+class CategorySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Category
+        fields = (
+            'id',
+            'name',
+            'description',
+            'category_type',
+            'theme_color_hash',
+        )
+        extra_kwargs = {
+            'name': {'required': True},
+            'category_type': {'required': True},
+            'theme_color_hash': {'required': True},
+        }
+        
+    def validate(self, attrs):
+        # if 'balance' in attrs.keys() and attrs['balance'] < 0:
+        #     raise serializers.ValidationError({"balance": "Balance cannot be less than zero"})
+
+        return attrs
+
+    def create(self, validated_data):
+        user = None
+        request = self.context.get("request")
+        if "user_id" in validated_data.keys() and validated_data['user_id']:
+            user = User.objects.get(id = validated_data["user_id"])
+        elif request and hasattr(request, "user"):
+            user = request.user
+        category = Category.objects.create(
+            user_id=user,
+            name=validated_data['name'],
+            category_type=validated_data['category_type'],
+            theme_color_hash=validated_data['theme_color_hash'],
+        )
+        
+        if 'description' in validated_data.keys():
+            category.description = validated_data['description']
+            
+        return category

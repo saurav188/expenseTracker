@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .serializer import AccountSerializer
+from .serializer import AccountSerializer, CategorySerializer
 from .models import Account, Category, Transaction
 from django.http import Http404
 from rest_framework.views import APIView
@@ -78,6 +78,65 @@ class AccountAPI(APIView):
             obj = Account.objects.filter(user_id = request.user).get(id = pk)
             obj.delete()
             return Response({"status":True,"message":"account successfully deleted"},status=status.HTTP_204_NO_CONTENT)
+        except:
+            return Response({"status":False,"message":"requested data doesnot exist"}, status=status.HTTP_400_BAD_REQUEST)
+            
+# account detail : api/acc/category/
+class CategoryAPI(APIView):
+    authentication_classes = [TokenAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+    pagination_class = PageNumberPagination
+
+
+    def post(self, request, format=None):
+        serializer = CategorySerializer(data=request.data,context={'request': request})
+        if not serializer.is_valid():
+            return Response({"status":False,"message":serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+        serializer.save()
+        return Response({"status":True,"message":"category created successfully"}, status=status.HTTP_201_CREATED)
+
+    def get(self, request, format=None):
+        if 'id' in request.data.keys():
+            try:
+                obj = Category.objects.filter(user_id = request.user).get(id = request.data['id'])
+            except:
+                return Response({"status":False,"message":"requested data doesnot exist"}, status=status.HTTP_400_BAD_REQUEST)
+            serializer = CategorySerializer(obj, many=False)
+        else:
+            try:
+                objs = Category.objects.filter(user_id = request.user)
+                if 'name' in request.data.keys():
+                    objs = objs.filter(name__icontains=request.data['name'])
+            except:
+                return Response({"status":False,"message":"requested data doesnot exist"}, status=status.HTTP_400_BAD_REQUEST)
+            try:
+                page = request.GET.get('page',1)
+                page_size = 2
+                paginator = Paginator(objs, page_size)
+                serializer = CategorySerializer(paginator.page(page), many=True)
+            except:
+                return Response({"status":False,"message":"invalid page number"}, status=status.HTTP_400_BAD_REQUEST)
+                
+            
+        return Response(serializer.data)
+
+    def patch(self, request, format=None):
+        try:
+            obj = Category.objects.filter(user_id = request.user).get(id = request.data['id'])
+            serializer = CategorySerializer(obj ,data=request.data, partial = True)
+            if not serializer.is_valid():
+                return Response({"status":False,"message":serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+            serializer.save()
+        except:
+            return Response({"status":False,"message":"requested data doesnot exist"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"status":True,"message":"category detail successfully updated"}, status=status.HTTP_201_CREATED)
+
+    def delete(self, request, *args, **kwargs):
+        try:
+            pk = request.data['id']
+            obj = Category.objects.filter(user_id = request.user).get(id = pk)
+            obj.delete()
+            return Response({"status":True,"message":"category successfully deleted"},status=status.HTTP_204_NO_CONTENT)
         except:
             return Response({"status":False,"message":"requested data doesnot exist"}, status=status.HTTP_400_BAD_REQUEST)
             
