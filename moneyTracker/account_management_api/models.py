@@ -75,7 +75,7 @@ class Transaction(models.Model):
         verbose_name_plural = _("Transactions")
 
     def __str__(self):
-        return str(self.amount) + " in " + str(account_id)
+        return str(self.amount) + " in " + str(self.account_id)
 
     def get_absolute_url(self):
         return reverse("Transaction_detail", kwargs={"pk": self.pk})

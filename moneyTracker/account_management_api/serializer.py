@@ -103,3 +103,45 @@ class CategorySerializer(serializers.ModelSerializer):
             category.description = validated_data['description']
             
         return category
+
+class TransactionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Transaction
+        fields = (
+            'id',
+            'account_id',
+            'category_id',
+            'amount',
+            'note',
+        )
+        extra_kwargs = {
+            'account_id': {'required': True},
+            'category_id': {'required': True},
+            'amount': {'required': True},
+        }
+        
+    def validate(self, attrs):
+        if 'amount' in attrs.keys() and attrs['amount'] < 0:
+            raise serializers.ValidationError({"amount": "amount cannot be less than zero"})
+
+        return attrs
+
+    def create(self, validated_data):
+        user = None
+        request = self.context.get("request")
+        if "user_id" in validated_data.keys() and validated_data['user_id']:
+            user = User.objects.get(id = validated_data["user_id"])
+        elif request and hasattr(request, "user"):
+            user = request.user
+        transaction = Transaction.objects.create(
+            user_id=user,
+            account_id=validated_data['account_id'],
+            category_id=validated_data['category_id'],
+            amount=validated_data['amount'],
+        )
+        
+        if 'note' in validated_data.keys():
+            transaction.note = validated_data['note']
+            
+        return transaction
