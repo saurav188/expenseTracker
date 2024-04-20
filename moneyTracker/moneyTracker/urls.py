@@ -20,6 +20,7 @@ from auth_api import urls as auth_api_urls
 from account_management_api import urls as acc_mgmt_urls
 
 urlpatterns = [
+    path('', include('admin_volt.urls')),
     path('admin/', admin.site.urls),
     path('api/auth/', include(auth_api_urls)),
     path('api/acc/', include(acc_mgmt_urls)),
