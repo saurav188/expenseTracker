@@ -1,0 +1,25 @@
+import React from 'react'
+import MenuBar from '../components/MenuBar'
+
+const Navbar = () => {
+ return (
+    <div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <a class="navbar-brand" href="#">MoneyTracker</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <MenuBar path={'/'} name='Dashboard' />
+                <MenuBar path={'/account'} name='Account' />
+                <MenuBar path={'/category'} name='Category' />
+                <MenuBar path={'/transaction'} name='Transaction' />
+            </ul>
+          </div>
+        </nav>
+    </div>
+  )
+}
+
+export default Navbar
