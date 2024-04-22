@@ -1,12 +1,12 @@
 import React from "react";
-import Navbar from "../components/Navbar";
+import NavbarHeader from "../components/NavbarHeader";
 
 
 
 function Account() {
   return ( 
     <>
-        <Navbar />
+        <NavbarHeader />
         <h1>
             Account
         </h1>

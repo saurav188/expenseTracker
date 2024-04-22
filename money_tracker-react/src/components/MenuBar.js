@@ -9,7 +9,7 @@ function MenuBar({name, icon, path}) {
         <Link
         type="button"
         to={path}
-        className={`nav-link`}
+        className={`nav-link d-flex justify-content-center`}
         >
             <p>{ name }</p>
         </Link>

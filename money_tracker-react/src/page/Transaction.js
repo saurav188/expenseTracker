@@ -1,12 +1,12 @@
 import React from "react";
-import Navbar from "../components/Navbar";
+import NavbarHeader from "../components/NavbarHeader";
 
 
 
 function Transaction() {
   return ( 
     <>
-        <Navbar />
+        <NavbarHeader />
         <h1>
             Transaction
         </h1>
