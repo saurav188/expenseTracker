@@ -12,8 +12,20 @@ import UserDetail from './page/UserDetail';
 import PasswordResetEmail from './page/PasswordResetEmail';
 import PasswordResetConfirm from './page/PasswordResetConfirm';
 import Error from './page/Error';
+import { useState } from 'react';
 
 function App() {
+  const [loggedIn, setLoggedIn] = useState(false)
+  const [email, setEmail] = useState('')
+  // const [token, setToken] = useState()
+
+
+  function getToken() {
+    const tokenString = sessionStorage.getItem('token')
+    const userToken = JSON.parse(tokenString)
+    return userToken?.token
+  } 
+
   return (
     <BrowserRouter>
       <Routes>

@@ -17,9 +17,9 @@ class Account(models.Model):
     CHECKING = "CHK"
     INVESTMENT = "INV"
     ACCOUNT_TYPE_CHOICE = {
-        SAVINGS: "Savings",
-        CHECKING: "Checking",
-        INVESTMENT: "Investment",
+        (SAVINGS, "Savings"),
+        (CHECKING, "Checking"),
+        (INVESTMENT, "Investment"),
     }
     account_type = models.CharField(
         max_length=3,
@@ -41,9 +41,9 @@ class Category(models.Model):
     EXPENSE = "EXP"
     TRANSFER = "TRN"
     CATEGORY_TYPE_CHOICE = {
-        INCOME: "Income",
-        EXPENSE: "Expense",
-        TRANSFER: "Transfer",
+        (INCOME, "Income"),
+        (EXPENSE, "Expense"),
+        (TRANSFER, "Transfer"),
     }
 
     category_type = models.CharField(
