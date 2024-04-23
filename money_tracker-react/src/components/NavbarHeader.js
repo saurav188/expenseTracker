@@ -5,9 +5,23 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import MenuBar from '../components/MenuBar'
 import getToken  from "../hooks/GetToken";
 
+import { useState } from 'react'
+import Logout from '../hooks/Logout';
+import { useNavigate } from "react-router-dom";
+
 
 function NavbarHeader(props) {
-  console.log(getToken())
+  const navigate = useNavigate();
+
+  let profileComp = ()=>{
+    if(getToken()){
+      return <Nav.Link href="#" onClick={()=>Logout(navigate, sessionStorage)}>Logout</Nav.Link>;
+    }
+    else{
+      return <MenuBar path={'/login'} name='Login' />;
+    }
+  }
+
   return (
     <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
       <Container>
@@ -15,26 +29,13 @@ function NavbarHeader(props) {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
-            {/* <Nav.Link href="#features">Features</Nav.Link>
-            <Nav.Link href="#pricing">Pricing</Nav.Link>
-            <NavDropdown title="Dropdown" id="collapsible-nav-dropdown">
-              <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">
-                Another action
-              </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.4">
-                Separated link
-              </NavDropdown.Item>
-            </NavDropdown> */}
             <MenuBar path={'/'} name='Dashboard' />
             <MenuBar path={'/account'} name='Account' />
             <MenuBar path={'/category'} name='Category' />
             <MenuBar path={'/transaction'} name='Transaction' />
           </Nav>
           <Nav className="d-flex justify-content-center align-items-center">
-            <Nav.Link href="#">Logout</Nav.Link>
+            {profileComp()} 
             <Nav.Link eventKey={2} href="#memes">
               my profile
             </Nav.Link>

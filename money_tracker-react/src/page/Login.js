@@ -47,7 +47,7 @@ function Login() {
         navigate("/");
       }
       else
-        setToken(false)
+        sessionStorage.removeItem('itemName');
     })
     .catch(error => console.log('Error: ' + error.message));
   }
