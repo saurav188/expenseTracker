@@ -2,31 +2,30 @@ import React from "react";
 import NavbarHeader from "../components/NavbarHeader";
 import { useState } from 'react'
 import '../style/login.css'
-import LoginHook from '../hooks/LoginHook'
+import { useNavigate } from "react-router-dom";
+import getToken  from "../hooks/GetToken";
 
 function Login() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [loginError, setLoginError] = useState('')
+  const [loggedIn, setLoggedIn] = useState(false)
+  const navigate = useNavigate();
 
   // const navigate = useNavigate()
 
 
   function setToken(userToken) {
-    sessionStorage.setItem('token', JSON.stringify(userToken))
+    sessionStorage.setItem('moneyTrackertoken', JSON.stringify(userToken))
   }
 
-  const onButtonClick = (e) => {
-    // You'll update this function later...
-    console.log(username)
-    console.log(password)
+
+  const LoginFunction = (e) => {
     setLoginError('sent successfully')
     let data= {
       username:username,
       password:password,
     }
-    console.log(data)
-    // console.log(LoginHook(data))
     let url = 'http://localhost:8000/api/auth/user/login/';
     let header = {
       "Content-Type": "application/json",
@@ -38,20 +37,29 @@ function Login() {
       // mode: "no-cors",
       body: JSON.stringify(data),
     })
+    .then(reponse =>
+      reponse.json()
+    )
     .then(data=>{
-      console.log(data);
+      if(data['status']){
+        setToken(data['token']);
+        setLoggedIn(true);
+        navigate("/");
+      }
+      else
+        setToken(false)
     })
     .catch(error => console.log('Error: ' + error.message));
   }
 
   return (
     <>
-    <NavbarHeader />
+    <NavbarHeader/>
     <div className={'mainContainer'}>
       <div className={'titleContainer'}>
         <div>Login</div>
       </div>
-      <br />
+      <br /> 
       <div className={'inputContainer'}>
         <input
           value={username}
@@ -72,7 +80,7 @@ function Login() {
       <label className="errorLabel">{loginError}</label>
       <br />
       <div className={'inputContainer'}>
-        <input className={'inputButton'} type="button" onClick={onButtonClick} value={'Log in'} />
+        <input className={'inputButton'} type="button" onClick={LoginFunction} value={'Log in'} />
       </div>
     </div>
     </>
