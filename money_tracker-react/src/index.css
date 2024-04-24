@@ -11,12 +11,6 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-@media screen and (max-width: 992px) {
-  #nav-bar-profile{
-    display: none;
-    align-self: flex-start;
-  }
-}
 
 .main-container{
   padding: 5% 10%;
@@ -32,4 +26,24 @@ code {
 
 .form-title{
   border-bottom: 1px solid black;
+}
+
+@media screen and (max-width: 992px) {
+  #nav-bar-profile{
+    display: none;
+    align-self: flex-start;
+  }
+  .main-container{
+    padding: 1.5% 3%;
+    justify-content: flex-start;
+  }
+  
+  .form-container{
+    border: 0px;
+    padding: 1.5% 1%;
+  }
+  
+  .form-title{
+    border-bottom: 1px solid black;
+  }
 }

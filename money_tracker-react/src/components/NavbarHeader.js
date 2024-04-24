@@ -21,7 +21,10 @@ function NavbarHeader(props) {
     }
     else{
       return (
-         <MenuBar path={'/login'} name='Login' />
+        <>
+          <MenuBar path={'/login'} name='Login' />
+          <MenuBar path={'/registration'} name='Sign Up' />
+        </>
         )
     }
   }
