@@ -16,7 +16,10 @@ function NavbarHeader(props) {
   let profileComp = ()=>{
     if(getToken()){
       return ( 
-        <Nav.Link href="#" onClick={()=>Logout(navigate, sessionStorage)}>Logout</Nav.Link>
+        <>
+          <Nav.Link href="#" onClick={()=>Logout(navigate, sessionStorage)}>Logout</Nav.Link>
+          <MenuBar path={'/user-detail'} name='My Profile' />
+        </>
       );
     }
     else{

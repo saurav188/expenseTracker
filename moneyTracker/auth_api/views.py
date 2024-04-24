@@ -28,7 +28,7 @@ class UserDetailAPI(APIView):
 
     def get(self, request, format=None):
         serializer = RegistrationSerializer(request.user, many=False)
-        return Response(serializer.data)
+        return Response({"status":True,"message":"data retrieved successfully","data":serializer.data}, status=status.HTTP_201_CREATED)
 
     def patch(self, request, format=None):
         serializer = RegistrationSerializer(request.user ,data=request.data, partial = True)

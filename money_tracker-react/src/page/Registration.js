@@ -12,12 +12,6 @@ function Registration() {
   const [email, setEmail] = useState('');
   const [firstname, setFirstname] = useState('');
   const [lastname, setLastname] = useState('');
-  const [usernameError, setUsernameError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
-  const [password2Error, setPassword2Error] = useState('');
-  const [emailError, setEmailError] = useState('');
-  const [firstnameError, setFirstnameError] = useState('');
-  const [lastnameError, setLastnameError] = useState('');
   const [Error, setError] = useState({
       "username": "",
       "password": "",
@@ -51,26 +45,21 @@ function Registration() {
       body: JSON.stringify(data),
     })
     .then(reponse =>{
-      console.log(reponse)
       return reponse.json();
     })
     .then(data=>{
-      console.log(data)
       if(data['status']){
         navigate("/login");
       }
       else{
         let temp = Error;
         for(var key in temp){
-          console.log(key)
-          console.log(key in data['message'])
           if(key in data['message'])
             temp[key] = <p className="text-danger"> {data['message'][key][0]}</p>
           else
             temp[key] = ''
         }
         setError(temp)
-        console.log(Error)
       }
     })
     .catch(error => console.log('Error: ' + error.message));
