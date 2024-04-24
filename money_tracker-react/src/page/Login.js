@@ -4,6 +4,8 @@ import { useState } from 'react'
 import '../style/login.css'
 import { useNavigate } from "react-router-dom";
 import getToken  from "../hooks/GetToken";
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 
 function Login() {
   const [username, setUsername] = useState('')
@@ -54,35 +56,35 @@ function Login() {
 
   return (
     <>
-    <NavbarHeader/>
-    <div className={'mainContainer'}>
-      <div className={'titleContainer'}>
-        <div>Login</div>
+      <NavbarHeader/>
+      <div className="main-container">
+        <div className="form-container w-50">
+          <Form>
+            <h1 className="form-title">
+              Login
+            </h1>
+            <Form.Group className="mb-3" controlId="formBasicEmail">
+              <Form.Label>Username</Form.Label>
+              <Form.Control onChange={(ev) => setUsername(ev.target.value)} type="text" placeholder="Enter username" />
+              {/* <Form.Text className="text-muted">
+                Your username here...
+              </Form.Text> */}
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="formBasicPassword">
+              <Form.Label>Password</Form.Label>
+              <Form.Control onChange={(ev) => setPassword(ev.target.value)} type="password" placeholder="Password" />
+            </Form.Group>
+            {/* <Form.Group className="mb-3" controlId="formBasicCheckbox">
+              <Form.Check type="checkbox" label="Check me out" />
+            </Form.Group> */}
+            <Button onClick={LoginFunction} variant="primary">
+              Login
+            </Button>
+          </Form>
+
+        </div>
       </div>
-      <br /> 
-      <div className={'inputContainer'}>
-        <input
-          value={username}
-          placeholder="Enter your username here"
-          onChange={(ev) => setUsername(ev.target.value)}
-          className={'inputBox'}
-        />
-      </div>
-      <br />
-      <div className={'inputContainer'}>
-        <input
-          value={password}
-          placeholder="Enter your password here"
-          onChange={(ev) => setPassword(ev.target.value)}
-          className={'inputBox'}
-        />
-      </div>
-      <label className="errorLabel">{loginError}</label>
-      <br />
-      <div className={'inputContainer'}>
-        <input className={'inputButton'} type="button" onClick={LoginFunction} value={'Log in'} />
-      </div>
-    </div>
     </>
   )
 }

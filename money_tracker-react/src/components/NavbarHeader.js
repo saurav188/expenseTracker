@@ -15,10 +15,14 @@ function NavbarHeader(props) {
 
   let profileComp = ()=>{
     if(getToken()){
-      return <Nav.Link href="#" onClick={()=>Logout(navigate, sessionStorage)}>Logout</Nav.Link>;
+      return ( 
+        <Nav.Link href="#" onClick={()=>Logout(navigate, sessionStorage)}>Logout</Nav.Link>
+      );
     }
     else{
-      return <MenuBar path={'/login'} name='Login' />;
+      return (
+         <MenuBar path={'/login'} name='Login' />
+        )
     }
   }
 
@@ -36,9 +40,9 @@ function NavbarHeader(props) {
           </Nav>
           <Nav className="d-flex justify-content-center align-items-center">
             {profileComp()} 
-            <Nav.Link eventKey={2} href="#memes">
+            {/* <Nav.Link eventKey={2} href="#memes">
               my profile
-            </Nav.Link>
+            </Nav.Link> */}
           </Nav>
         </Navbar.Collapse>
       </Container>

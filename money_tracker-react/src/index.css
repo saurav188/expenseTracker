@@ -17,3 +17,19 @@ code {
     align-self: flex-start;
   }
 }
+
+.main-container{
+  padding: 5% 10%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-container{
+  border: 1px black solid;
+  padding: 7.5% 5%;
+}
+
+.form-title{
+  border-bottom: 1px solid black;
+}
