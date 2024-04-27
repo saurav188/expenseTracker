@@ -52,7 +52,7 @@ function PasswordResetEmail() {
             </h1>
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Label>Email</Form.Label>
-              <Form.Control onChange={(ev) => setEmail(ev.target.value)} type="email" placeholder="Enter you email" />
+              <Form.Control onChange={(ev) => setEmail(ev.target.value)} type="email" placeholder="Enter your email" />
               {/* <Form.Text className="text-muted">
                 Your username here...
               </Form.Text> */}
