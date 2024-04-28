@@ -28,6 +28,22 @@ code {
   border-bottom: 1px solid black;
 }
 
+.btn-container{
+  padding: 3vh 0px;
+}
+
+.pagination-btns{
+  display: flex;
+  justify-content: flex-end;
+}
+
+.curr-page{
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  padding: 5px;
+}
+
 @media screen and (max-width: 992px) {
   #nav-bar-profile{
     display: none;

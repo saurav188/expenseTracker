@@ -37,17 +37,19 @@ class AccountAPI(APIView):
             except:
                 return Response({"status":False,"message":"requested data doesnot exist"}, status=status.HTTP_400_BAD_REQUEST)
             serializer = AccountSerializer(obj, many=False)
+            return Response({"status":True,"message":"account detail successfully updated","data":serializer.data}, status=status.HTTP_201_CREATED)
+            
         else:
             try:
                 objs = Account.objects.filter(user_id = request.user)
-                if 'name' in request.data.keys():
-                    objs = objs.filter(name__icontains=request.data['name'])
-                if 'show_card' in request.data.keys():
-                    objs = objs.filter(show_card=request.data['show_card'])
-                if 'show_pie' in request.data.keys():
-                    objs = objs.filter(show_pie=request.data['show_pie'])
-                if 'show_line' in request.data.keys():
-                    objs = objs.filter(show_line=request.data['show_line'])
+                if request.GET.get('name'):
+                    objs = objs.filter(name__icontains=request.GET.get('name'))
+                if request.GET.get('show_card'):
+                    objs = objs.filter(show_card=request.GET.get('show_card'))
+                if request.GET.get('show_pie'):
+                    objs = objs.filter(show_pie=request.GET.get('show_pie'))
+                if request.GET.get('show_line'):
+                    objs = objs.filter(show_line=request.GET.get('show_line'))
             except:
                 return Response({"status":False,"message":"requested data doesnot exist"}, status=status.HTTP_400_BAD_REQUEST)
             try:
@@ -55,11 +57,13 @@ class AccountAPI(APIView):
                 page_size = 2
                 paginator = Paginator(objs, page_size)
                 serializer = AccountSerializer(paginator.page(page), many=True)
+                return Response({"status":True,"message":"account detail successfully updated","num_pages":paginator.num_pages,"data":serializer.data}, status=status.HTTP_201_CREATED)
             except:
                 return Response({"status":False,"message":"invalid page number"}, status=status.HTTP_400_BAD_REQUEST)
                 
             
-        return Response(serializer.data)
+        return Response({"status":True,"message":"account detail successfully updated","num_pages":paginator.num_pages,"data":serializer.data}, status=status.HTTP_201_CREATED)
+
 
     def patch(self, request, format=None):
         try:
