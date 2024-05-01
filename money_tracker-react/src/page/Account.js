@@ -4,8 +4,10 @@ import NavbarHeader from "../components/NavbarHeader";
 import Table from 'react-bootstrap/Table';
 import getToken  from "../hooks/GetToken";
 import useRunOnce from "../hooks/useRunOnce";
+import Form from 'react-bootstrap/Form';
 import Button from "react-bootstrap/esm/Button";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { FaArrowLeft, FaArrowRight, FaFilter } from "react-icons/fa";
+import { MdClose } from "react-icons/md";
 
 function Account() {
   const [Error, setError] = useState('')
@@ -15,13 +17,21 @@ function Account() {
   const [Page, setPage] = useState(1)
   const [MaxPage, setMaxPage] = useState(1)
   const [Name, setName] = useState('')
-  const [ShowCard, setShowCard] = useState(1)
-  const [ShowPie, setShowPie] = useState(1)
-  const [ShowLine, setShowLine] = useState(1)
+  const [ShowCard, setShowCard] = useState(0)
+  const [ShowPie, setShowPie] = useState(0)
+  const [ShowLine, setShowLine] = useState(0)
+  const [url, setUrl] = useState(`http://localhost:8000/api/acc/account/?page=${Page}`)
   
+  let gettFilterUrl = (ev) => {
+    ev.preventDefault()
+    setUrl(`http://localhost:8000/api/acc/account/?page=${Page}&name=${Name}&show_card=${ShowCard}&show_pie=${ShowPie}&show_line=${ShowLine}`);
+  }
 
-  let gettFilterUrl = () => {
-    return `http://localhost:8000/api/acc/account/?page=${Page}&show_card=${ShowCard}&show_pie=${ShowPie}&show_line=${ShowLine}`;
+  let resetFilter = (ev) => {
+    setName('');
+    setShowCard(0);
+    setShowPie(0);
+    setShowLine(0);
   }
 
   let prevPage = () => {
@@ -34,16 +44,9 @@ function Account() {
       setPage(Page+1);
   }
 
-  useEffect(() => { 
-    getData()
- }, [Page])
-
-
   let NewFunction = () => {
     console.log("new button")
   }
-
-  let url = `http://localhost:8000/api/acc/account/?page=${Page}`;
 
   let getData = () => {
     let header = {
@@ -67,24 +70,56 @@ function Account() {
     .catch(error => console.log('Error: ' + error.message));
   }
 
+  let filterToggle = (ev) =>{
+    document.getElementById("account_filters").classList.toggle("d-none")
+    Array.from(document.getElementById('account_filter_btn').children).forEach(e=>{
+      e.classList.toggle('d-none');
+    })
+  }
+
   useRunOnce({
     fn: getData 
   })
+
+  useEffect(() => { 
+    getData()
+ }, [Page,url])
 
   return ( 
     <>
       <NavbarHeader/>
       <div className="main-container">
         <div className="w-100">
-          <h1>
-            Accounts
-          </h1>
           <div>
             <div>
-              <div className="btn-container">
-              <Button type="submit" variant="primary" onClick={NewFunction}>
-                New
-              </Button>
+              <div className="title-container">
+                <h1>
+                  Accounts
+                </h1>
+              </div>
+              <div className="btn-container d-flex justify-content-between">
+                <Button type="submit" variant="primary" onClick={NewFunction}>
+                  New
+                </Button>
+                <Button id = "account_filter_btn" type="submit" variant="secondary" onClick={filterToggle}>
+                  <FaFilter />
+                  <MdClose className="d-none" />
+                </Button>
+              </div>
+              <div id = "account_filters" className="filter-container d-none p-3 border-top">
+              <Form onSubmit={(ev)=>gettFilterUrl(ev)} onReset={(ev)=>resetFilter(ev)}>
+                <Form.Group className="mb-3" controlId="reg-email">
+                  <Form.Label>Name</Form.Label>
+                  <Form.Control onChange={(ev) => setName(ev.target.value)} type="text" placeholder="Enter name to search" />
+                  {Error['email']}
+                </Form.Group>
+                <Button type="submit" variant="primary">
+                  Filter
+                </Button>
+                <Button type="reset" variant="secondary">
+                  Reset
+                </Button>
+              </Form>
               </div>
             </div>
             <Table striped bordered hover>
