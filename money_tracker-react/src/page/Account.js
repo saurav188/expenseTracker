@@ -4,7 +4,9 @@ import NavbarHeader from "../components/NavbarHeader";
 import Table from 'react-bootstrap/Table';
 import getToken  from "../hooks/GetToken";
 import useRunOnce from "../hooks/useRunOnce";
+import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
+import Row from 'react-bootstrap/Row';
 import Button from "react-bootstrap/esm/Button";
 import { FaArrowLeft, FaArrowRight, FaFilter } from "react-icons/fa";
 import { MdClose } from "react-icons/md";
@@ -82,6 +84,7 @@ function Account() {
   })
 
   useEffect(() => { 
+    setUrl(`http://localhost:8000/api/acc/account/?page=${Page}&name=${Name}&show_card=${ShowCard}&show_pie=${ShowPie}&show_line=${ShowLine}`);
     getData()
  }, [Page,url])
 
@@ -108,11 +111,26 @@ function Account() {
               </div>
               <div id = "account_filters" className="filter-container d-none p-3 border-top">
               <Form onSubmit={(ev)=>gettFilterUrl(ev)} onReset={(ev)=>resetFilter(ev)}>
-                <Form.Group className="mb-3" controlId="reg-email">
-                  <Form.Label>Name</Form.Label>
-                  <Form.Control onChange={(ev) => setName(ev.target.value)} type="text" placeholder="Enter name to search" />
-                  {Error['email']}
-                </Form.Group>
+                <Row>
+                  <Col>
+                    <Form.Label>Name</Form.Label>
+                    <Form.Control onChange={(ev) => setName(ev.target.value)} type="text" placeholder="Enter name to search" />
+                  </Col>
+                  <Row>
+                    <Col>
+                      <Form.Label>Show<br/> Card</Form.Label>
+                      <Form.Control className="btn" value={ShowCard} onChange={(ev) =>{setShowCard(ev.target.checked?1:0);}} type="checkbox" />
+                    </Col>
+                    <Col>
+                      <Form.Label>Show Pie</Form.Label>
+                      <Form.Control value={ShowPie} onChange={(ev) =>{setShowPie(ev.target.checked?1:0);}} type="checkbox" />
+                    </Col>
+                    <Col>
+                      <Form.Label>Show Line</Form.Label>
+                      <Form.Control value={ShowLine} onChange={(ev) =>{setShowLine(ev.target.checked?1:0);}} type="checkbox" />
+                    </Col>
+                  </Row>
+                </Row>
                 <Button type="submit" variant="primary">
                   Filter
                 </Button>

@@ -57,12 +57,12 @@ class AccountAPI(APIView):
                 page_size = 2
                 paginator = Paginator(objs, page_size)
                 serializer = AccountSerializer(paginator.page(page), many=True)
-                return Response({"status":True,"message":"account detail successfully updated","num_pages":paginator.num_pages,"data":serializer.data}, status=status.HTTP_201_CREATED)
+                return Response({"status":True,"message":"account detail successfully retried","num_pages":paginator.num_pages,"data":serializer.data}, status=status.HTTP_201_CREATED)
             except:
                 return Response({"status":False,"message":"invalid page number"}, status=status.HTTP_400_BAD_REQUEST)
                 
             
-        return Response({"status":True,"message":"account detail successfully updated","num_pages":paginator.num_pages,"data":serializer.data}, status=status.HTTP_201_CREATED)
+        # return Response({"status":True,"message":"account detail successfully updated","num_pages":paginator.num_pages,"data":serializer.data}, status=status.HTTP_201_CREATED)
 
 
     def patch(self, request, format=None):
