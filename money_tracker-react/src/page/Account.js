@@ -10,13 +10,31 @@ import Row from 'react-bootstrap/Row';
 import Button from "react-bootstrap/esm/Button";
 import { FaArrowLeft, FaArrowRight, FaFilter } from "react-icons/fa";
 import { MdClose } from "react-icons/md";
+import Modal from 'react-bootstrap/Modal';
+
 
 function Account() {
-  const [Error, setError] = useState('')
+  const [Error, setError] = useState({})
+
+  //form states
+  const [FormName, setFormName] = useState('')
+  const [FormDescription, setFormDescription] = useState('')
+  const [FormBalance, setFormBalance] = useState(0)
+  const [FormShowCard, setFormShowCard] = useState(0)
+  const [FormShowPie, setFormShowPie] = useState(0)
+  const [FormShowLine, setFormShowLine] = useState(0)
+  const [FormThemeColor, setFormThemeColor] = useState('')
+  const [FormThemeIcon, setFormThemeIcon] = useState('')
+
+
+
+
   const navigate = useNavigate();
   let token = getToken();
   const [Accounts, setAccounts] = useState([])
   const [Page, setPage] = useState(1)
+  const [FormOpen, setFormOpen] = useState(false)
+  const [ModalTitle, setModalTitle] = useState('New Account')
   const [MaxPage, setMaxPage] = useState(1)
   const [Name, setName] = useState('')
   const [ShowCard, setShowCard] = useState(0)
@@ -24,6 +42,8 @@ function Account() {
   const [ShowLine, setShowLine] = useState(0)
   const [url, setUrl] = useState(`http://localhost:8000/api/acc/account/?page=${Page}`)
   
+
+
   let gettFilterUrl = (ev) => {
     ev.preventDefault()
     setUrl(`http://localhost:8000/api/acc/account/?page=${Page}&name=${Name}&show_card=${ShowCard}&show_pie=${ShowPie}&show_line=${ShowLine}`);
@@ -47,6 +67,7 @@ function Account() {
   }
 
   let NewFunction = () => {
+    setFormOpen(true)
     console.log("new button")
   }
 
@@ -92,6 +113,63 @@ function Account() {
     <>
       <NavbarHeader/>
       <div className="main-container">
+        <div
+        className={`modal ${FormOpen?"":"d-none"}`}
+        style={{ display: 'block', position: 'absolute', backgroundColor:"rgba(255, 255, 255, 0.8)"}}
+      >
+        <Modal.Dialog>
+          <Modal.Header>
+            <Modal.Title>{ModalTitle}</Modal.Title>
+          </Modal.Header>
+
+          <Modal.Body>
+          <Form id="account-create-form">
+            <Form.Group className="mb-3">
+              <Form.Label>Name</Form.Label>
+              <Form.Control value={FormName} onChange={(ev) => setFormName(ev.target.value)} type="text" placeholder="Enter Name" />
+              {Error['name']}
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Balance</Form.Label>
+              <Form.Control disabled className="disabled" value={FormBalance} type="number" placeholder="0.00" />
+              {Error['balance']}
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Theme Color</Form.Label>
+              <Form.Control value={FormThemeColor} onChange={(ev) => setFormThemeColor(ev.target.value)} type="text" placeholder="Enter theme color" />
+              {Error['theme_color']}
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Theme Icon fa class </Form.Label>
+              <Form.Control value={FormThemeIcon} onChange={(ev) => setFormThemeIcon(ev.target.value)} type="text" placeholder="Enter theme icon" />
+              {Error['theme_icon']}
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Description</Form.Label>
+              <Form.Control as="textarea" value={FormDescription} onChange={(ev) => setFormDescription(ev.target.value)} type="text" placeholder="Enter Name" />
+              {Error['description']}
+            </Form.Group>
+            <Row>
+              <Col>
+                  <Form.Check label="Show Card" value={FormShowCard?true:false} onChange={(ev) => setFormShowCard(ev.target.checked?1:0)} type="switch" />
+              </Col>
+              <Col>
+                  <Form.Check label="Show Pie" value={FormShowPie?true:false} onChange={(ev) => setFormShowPie(ev.target.checked?1:0)} type="switch" />
+              </Col>
+              <Col>
+                  <Form.Check label="Show In Line" value={FormShowLine?true:false} onChange={(ev) => setFormShowLine(ev.target.checked?1:0)} type="switch" id="custom-switch" />
+              </Col>
+            </Row>
+          </Form>
+
+          </Modal.Body>
+
+          <Modal.Footer>
+            <Button variant="secondary" onClick={(ev)=>setFormOpen(false)}>Close</Button>
+            <Button variant="primary">Save changes</Button>
+          </Modal.Footer>
+        </Modal.Dialog>
+      </div>
         <div className="w-100">
           <div>
             <div>
