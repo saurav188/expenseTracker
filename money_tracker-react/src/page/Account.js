@@ -17,6 +17,7 @@ function Account() {
   const [Error, setError] = useState({})
 
   //form states
+  const [FormId, setFormId] = useState(0)
   const [FormName, setFormName] = useState('')
   const [FormDescription, setFormDescription] = useState('')
   const [FormBalance, setFormBalance] = useState(0)
@@ -42,7 +43,9 @@ function Account() {
   const [ShowLine, setShowLine] = useState(0)
   const [url, setUrl] = useState(`http://localhost:8000/api/acc/account/?page=${Page}`)
   
+  let saveClick = () => {
 
+  }
 
   let gettFilterUrl = (ev) => {
     ev.preventDefault()
@@ -125,6 +128,11 @@ function Account() {
           <Modal.Body>
           <Form id="account-create-form">
             <Form.Group className="mb-3">
+              <Form.Label>ID</Form.Label>
+              <Form.Control value={FormId} onChange={(ev) => setFormId(ev.target.value)} type="text" placeholder="Enter Name" />
+              {Error['name']}
+            </Form.Group>
+            <Form.Group className="mb-3">
               <Form.Label>Name</Form.Label>
               <Form.Control value={FormName} onChange={(ev) => setFormName(ev.target.value)} type="text" placeholder="Enter Name" />
               {Error['name']}
@@ -166,7 +174,7 @@ function Account() {
 
           <Modal.Footer>
             <Button variant="secondary" onClick={(ev)=>setFormOpen(false)}>Close</Button>
-            <Button variant="primary">Save changes</Button>
+            <Button variant="primary" onClick={ev=>saveClick()}>Save changes</Button>
           </Modal.Footer>
         </Modal.Dialog>
       </div>
