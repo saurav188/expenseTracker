@@ -354,9 +354,6 @@ function Account() {
 
   useEffect(() => { 
     setUrl(`http://localhost:8000/api/acc/account/?page=${Page}&name=${Name}&show_card=${ShowCard}&show_pie=${ShowPie}&show_line=${ShowLine}`);
- }, [Page,Name,ShowCard,ShowPie,ShowLine])
-  useEffect(() => { 
-    setUrl(`http://localhost:8000/api/acc/account/?page=${Page}&name=${Name}&show_card=${ShowCard}&show_pie=${ShowPie}&show_line=${ShowLine}`);
     getData()
  }, [Page,url])
 
@@ -406,13 +403,13 @@ function Account() {
                     </Col>
                     <Col>
                       <Form.Label>Show Line</Form.Label>
-                      <Form.Control value={ShowLine} onChange={(ev) =>{setShowLine(ev.target.checked?1:0);console.log(ShowLine)}} type="checkbox" />
+                      <Form.Control value={ShowLine} onChange={(ev) =>{setShowLine(ev.target.checked?1:0);}} type="checkbox" />
                     </Col>
                   </Row>
                 </Row>
-                {/* <Button type="submit" variant="primary">
+                <Button type="submit" variant="primary">
                   Filter
-                </Button> */}
+                </Button>
                 <Button type="reset" variant="secondary">
                   Reset
                 </Button>
