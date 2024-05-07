@@ -26,6 +26,7 @@ function Account() {
   const [FormShowLine, setFormShowLine] = useState(0)
   const [FormThemeColor, setFormThemeColor] = useState('')
   const [FormThemeIcon, setFormThemeIcon] = useState('')
+  const [FormAccountType, setFormAccountType] = useState('CHK')
 
 
 
@@ -44,7 +45,7 @@ function Account() {
   const [url, setUrl] = useState(`http://localhost:8000/api/acc/account/?page=${Page}`)
   
   let saveClick = () => {
-
+    console.log('save clicked')
   }
 
   let gettFilterUrl = (ev) => {
@@ -71,7 +72,6 @@ function Account() {
 
   let NewFunction = () => {
     setFormOpen(true)
-    console.log("new button")
   }
 
   let getData = () => {
@@ -103,6 +103,49 @@ function Account() {
     })
   }
 
+  let OpenEditModal = (ev,id) => {
+    setFormOpen(true);
+    let temp = `http://localhost:8000/api/acc/account/?id=${id}`;
+    let header = {
+      "Content-Type": "application/json",
+      "Authorization": `Token ${token}`
+    }
+
+    fetch(temp, {
+      method: "GET", 
+      headers: header,
+    })
+    .then(reponse =>
+      reponse.json()
+    )
+    .then(data=>{
+      setFormId(data['data']['id'])
+      setFormName(data['data']['name'])
+      setFormDescription(data['data']['description'])
+      setFormBalance(data['data']['balance'])
+      setFormShowCard(data['data']['show_card'])
+      setFormShowPie(data['data']['show_pie'])
+      setFormShowLine(data['data']['show_line'])
+      setFormThemeColor(data['data']['theme_color_hash'])
+      setFormThemeIcon(data['data']['theme_icon_fa_class'])
+      setFormAccountType(data['data']['account_type'])
+    })
+    .catch(error => console.log('Error: ' + error.message));
+  }
+
+  let resetModalForm = () => {
+    setFormId(0)
+    setFormName('')
+    setFormDescription('')
+    setFormBalance(0)
+    setFormShowCard(0)
+    setFormShowPie(0)
+    setFormShowLine(0)
+    setFormThemeColor('')
+    setFormThemeIcon('')
+    setFormAccountType('CHK')
+  }
+
   useRunOnce({
     fn: getData 
   })
@@ -129,8 +172,7 @@ function Account() {
           <Form id="account-create-form">
             <Form.Group className="mb-3">
               <Form.Label>ID</Form.Label>
-              <Form.Control value={FormId} onChange={(ev) => setFormId(ev.target.value)} type="text" placeholder="Enter Name" />
-              {Error['name']}
+              <Form.Control disabled value={FormId} type="text"/>
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Name</Form.Label>
@@ -173,7 +215,7 @@ function Account() {
           </Modal.Body>
 
           <Modal.Footer>
-            <Button variant="secondary" onClick={(ev)=>setFormOpen(false)}>Close</Button>
+            <Button variant="secondary" onClick={(ev)=>{setFormOpen(false);resetModalForm();}}>Close</Button>
             <Button variant="primary" onClick={ev=>saveClick()}>Save changes</Button>
           </Modal.Footer>
         </Modal.Dialog>
@@ -238,7 +280,7 @@ function Account() {
                 {
                   Accounts.map(account=>{
                     return (
-                      <tr key={account.id}>
+                      <tr onClick={(ev)=>OpenEditModal(ev, account.id)} key={account.id}>
                         <td>{account.name}</td>
                         <td>{account.balance}</td>
                         <td>{account.description}</td>

@@ -31,9 +31,9 @@ class AccountAPI(APIView):
         return Response({"status":True,"message":"account created successfully"}, status=status.HTTP_201_CREATED)
 
     def get(self, request, format=None):
-        if 'id' in request.data.keys():
+        if request.GET.get('id'):
             try:
-                obj = Account.objects.filter(user_id = request.user).get(id = request.data['id'])
+                obj = Account.objects.filter(user_id = request.user).get(id = request.GET.get('id'))
             except:
                 return Response({"status":False,"message":"requested data doesnot exist"}, status=status.HTTP_400_BAD_REQUEST)
             serializer = AccountSerializer(obj, many=False)
