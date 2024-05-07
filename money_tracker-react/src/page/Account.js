@@ -14,7 +14,17 @@ import Modal from 'react-bootstrap/Modal';
 
 
 function Account() {
-  const [Error, setError] = useState({})
+  const [Error, setError] = useState({
+    'name':'',
+    'description':'',
+    'balance':'',
+    'show_card':'',
+    'show_pie':'',
+    'show_line':'',
+    'theme_color_hash':'',
+    'theme_icon_fa_class':'',
+    'account_type':'',
+  })
 
   //form states
   const [FormId, setFormId] = useState(0)
@@ -27,8 +37,6 @@ function Account() {
   const [FormThemeColor, setFormThemeColor] = useState('')
   const [FormThemeIcon, setFormThemeIcon] = useState('')
   const [FormAccountType, setFormAccountType] = useState('CHK')
-
-
 
 
   const navigate = useNavigate();
@@ -44,8 +52,116 @@ function Account() {
   const [ShowLine, setShowLine] = useState(0)
   const [url, setUrl] = useState(`http://localhost:8000/api/acc/account/?page=${Page}`)
   
+  const account_type = {
+    'Savings':'SVG',
+    'Checking':'CHK',
+    'Investment':'INV'
+  }
+
   let saveClick = () => {
-    console.log('save clicked')
+    if(FormId===0){
+      setFormOpen(true);
+      let temp = `http://localhost:8000/api/acc/account/`;
+      let header = {
+        "Content-Type": "application/json",
+        "Authorization": `Token ${token}`
+      }
+      
+      let data = {
+        'name':FormName,
+        'description':FormDescription,
+        'balance':FormBalance,
+        'show_card':FormShowCard,
+        'show_pie':FormShowPie,
+        'show_line':FormShowLine,
+        'theme_color_hash':FormThemeColor,
+        'theme_icon_fa_class':FormThemeIcon,
+        'account_type':FormAccountType,
+      }
+
+      fetch(temp, {
+        method: "POST", 
+        headers: header,
+        body: JSON.stringify(data),
+      })
+      .then(reponse =>
+        reponse.json()
+      )
+      .then(data=>{
+        if(data['status']){
+          getData()
+          setFormOpen(false)
+          resetModalForm()
+        }
+
+        else{
+          let temp = Error;
+          for(var key in temp){
+            if(key in data['message'])
+              temp[key] = <p className="text-danger"> {data['message'][key][0]}</p>
+            else
+              temp[key] = ''
+          }
+          setError(prevState => {
+            return temp
+          })
+          console.log(Error)
+        }
+      })
+      .catch(error => console.log('Error: ' + error.message));
+    }
+    else{
+      setFormOpen(true);
+      let temp = `http://localhost:8000/api/acc/account/`;
+      let header = {
+        "Content-Type": "application/json",
+        "Authorization": `Token ${token}`
+      }
+      
+      let data = {
+        'id':FormId,
+        'name':FormName,
+        'description':FormDescription,
+        'balance':FormBalance,
+        'show_card':FormShowCard,
+        'show_pie':FormShowPie,
+        'show_line':FormShowLine,
+        'theme_color_hash':FormThemeColor,
+        'theme_icon_fa_class':FormThemeIcon,
+        'account_type':FormAccountType,
+      }
+
+      fetch(temp, {
+        method: "PATCH", 
+        headers: header,
+        body: JSON.stringify(data),
+      })
+      .then(reponse =>
+        reponse.json()
+      )
+      .then(data=>{
+        if(data['status']){
+          getData()
+          setFormOpen(false)
+          resetModalForm()
+        }
+
+        else{
+          let temp = Error;
+          for(var key in temp){
+            if(key in data['message'])
+              temp[key] = <p className="text-danger"> {data['message'][key][0]}</p>
+            else
+              temp[key] = ''
+          }
+          setError(prevState => {
+            return temp
+          })
+          console.log(Error)
+        }
+      })
+      .catch(error => console.log('Error: ' + error.message));
+    }
   }
 
   let gettFilterUrl = (ev) => {
@@ -144,7 +260,93 @@ function Account() {
     setFormThemeColor('')
     setFormThemeIcon('')
     setFormAccountType('CHK')
+    setError(prevState => {
+      return {
+      'name':'',
+      'description':'',
+      'balance':'',
+      'show_card':'',
+      'show_pie':'',
+      'show_line':'',
+      'theme_color_hash':'',
+      'theme_icon_fa_class':'',
+      'account_type':'',
+        }
+    })
   }
+
+ let renderModalForm = () =>{
+  return (
+    <Modal.Dialog className="mh-75 overflow-auto">
+      <Modal.Header>
+        <Modal.Title>{ModalTitle}</Modal.Title>
+      </Modal.Header>
+
+      <Modal.Body>
+        <Form id="account-create-form">
+          <Form.Group className="mb-3">
+            <Form.Label>ID</Form.Label>
+            <Form.Control disabled value={FormId} type="text"/>
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Name</Form.Label>
+            <Form.Control value={FormName} onChange={(ev) => setFormName(ev.target.value)} type="text" placeholder="Enter Name" />
+            {Error['name']}
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Account Type:</Form.Label>
+            <Form.Control as="select" value={FormAccountType} onChange={(ev) => setFormAccountType(ev.target.value)}>
+              <option></option>
+              {
+                Object.keys(account_type).map(k=>(
+                  <option value={account_type[k]}>{k}</option>
+                ))
+              }
+              </Form.Control>
+            {Error['name']}
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Balance</Form.Label>
+            <Form.Control disabled className="disabled" value={FormBalance} type="number" placeholder="0.00" />
+            {Error['balance']}
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Theme Color</Form.Label>
+            <Form.Control value={FormThemeColor} onChange={(ev) => setFormThemeColor(ev.target.value)} type="text" placeholder="Enter theme color" />
+            {Error['theme_color']}
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Theme Icon fa class </Form.Label>
+            <Form.Control value={FormThemeIcon} onChange={(ev) => setFormThemeIcon(ev.target.value)} type="text" placeholder="Enter theme icon" />
+            {Error['theme_icon']}
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Description</Form.Label>
+            <Form.Control as="textarea" value={FormDescription} onChange={(ev) => setFormDescription(ev.target.value)} type="text" placeholder="Enter Name" />
+            {Error['description']}
+          </Form.Group>
+          <Row>
+            <Col>
+                <Form.Check label="Show Card" value={FormShowCard?true:false} onChange={(ev) => setFormShowCard(ev.target.checked?1:0)} type="switch" />
+            </Col>
+            <Col>
+                <Form.Check label="Show Pie" value={FormShowPie?true:false} onChange={(ev) => setFormShowPie(ev.target.checked?1:0)} type="switch" />
+            </Col>
+            <Col>
+                <Form.Check label="Show In Line" value={FormShowLine?true:false} onChange={(ev) => setFormShowLine(ev.target.checked?1:0)} type="switch" id="custom-switch" />
+            </Col>
+          </Row>
+        </Form>
+
+      </Modal.Body>
+
+      <Modal.Footer>
+        <Button variant="secondary" onClick={(ev)=>{setFormOpen(false);resetModalForm();}}>Close</Button>
+        <Button variant="primary" onClick={ev=>saveClick()}>Save changes</Button>
+      </Modal.Footer>
+    </Modal.Dialog>
+  )
+ }
 
   useRunOnce({
     fn: getData 
@@ -160,66 +362,12 @@ function Account() {
       <NavbarHeader/>
       <div className="main-container">
         <div
+        id='account-modal-container'
         className={`modal ${FormOpen?"":"d-none"}`}
         style={{ display: 'block', position: 'absolute', backgroundColor:"rgba(255, 255, 255, 0.8)"}}
-      >
-        <Modal.Dialog>
-          <Modal.Header>
-            <Modal.Title>{ModalTitle}</Modal.Title>
-          </Modal.Header>
-
-          <Modal.Body>
-          <Form id="account-create-form">
-            <Form.Group className="mb-3">
-              <Form.Label>ID</Form.Label>
-              <Form.Control disabled value={FormId} type="text"/>
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Name</Form.Label>
-              <Form.Control value={FormName} onChange={(ev) => setFormName(ev.target.value)} type="text" placeholder="Enter Name" />
-              {Error['name']}
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Balance</Form.Label>
-              <Form.Control disabled className="disabled" value={FormBalance} type="number" placeholder="0.00" />
-              {Error['balance']}
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Theme Color</Form.Label>
-              <Form.Control value={FormThemeColor} onChange={(ev) => setFormThemeColor(ev.target.value)} type="text" placeholder="Enter theme color" />
-              {Error['theme_color']}
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Theme Icon fa class </Form.Label>
-              <Form.Control value={FormThemeIcon} onChange={(ev) => setFormThemeIcon(ev.target.value)} type="text" placeholder="Enter theme icon" />
-              {Error['theme_icon']}
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Description</Form.Label>
-              <Form.Control as="textarea" value={FormDescription} onChange={(ev) => setFormDescription(ev.target.value)} type="text" placeholder="Enter Name" />
-              {Error['description']}
-            </Form.Group>
-            <Row>
-              <Col>
-                  <Form.Check label="Show Card" value={FormShowCard?true:false} onChange={(ev) => setFormShowCard(ev.target.checked?1:0)} type="switch" />
-              </Col>
-              <Col>
-                  <Form.Check label="Show Pie" value={FormShowPie?true:false} onChange={(ev) => setFormShowPie(ev.target.checked?1:0)} type="switch" />
-              </Col>
-              <Col>
-                  <Form.Check label="Show In Line" value={FormShowLine?true:false} onChange={(ev) => setFormShowLine(ev.target.checked?1:0)} type="switch" id="custom-switch" />
-              </Col>
-            </Row>
-          </Form>
-
-          </Modal.Body>
-
-          <Modal.Footer>
-            <Button variant="secondary" onClick={(ev)=>{setFormOpen(false);resetModalForm();}}>Close</Button>
-            <Button variant="primary" onClick={ev=>saveClick()}>Save changes</Button>
-          </Modal.Footer>
-        </Modal.Dialog>
-      </div>
+        >
+          {renderModalForm()}
+        </div>
         <div className="w-100">
           <div>
             <div>
