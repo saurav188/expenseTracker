@@ -51,6 +51,7 @@ function Account() {
   const [ShowPie, setShowPie] = useState(0)
   const [ShowLine, setShowLine] = useState(0)
   const [url, setUrl] = useState(`http://localhost:8000/api/acc/account/?page=${Page}`)
+  const [filterClicked, setFilterClicked] = useState(false)
   
   const account_type = {
     'Savings':'SVG',
@@ -353,7 +354,11 @@ function Account() {
   })
 
   useEffect(() => { 
-    setUrl(`http://localhost:8000/api/acc/account/?page=${Page}&name=${Name}&show_card=${ShowCard}&show_pie=${ShowPie}&show_line=${ShowLine}`);
+    if(filterClicked)
+      setUrl(`http://localhost:8000/api/acc/account/?page=${Page}&name=${Name}&show_card=${ShowCard}&show_pie=${ShowPie}&show_line=${ShowLine}`);
+    else
+      setUrl(`http://localhost:8000/api/acc/account/?page=${Page}`);
+
     getData()
  }, [Page,url])
 
@@ -386,7 +391,11 @@ function Account() {
                 </Button>
               </div>
               <div id = "account_filters" className="filter-container d-none p-3 border-top">
-              <Form onSubmit={(ev)=>gettFilterUrl(ev)} onReset={(ev)=>resetFilter(ev)}>
+              <Form onSubmit={(ev)=>{setFilterClicked(true);setPage(1);gettFilterUrl(ev);}} onReset={(ev)=>{
+                setFilterClicked(false);
+                resetFilter(ev);
+                setUrl(`http://localhost:8000/api/acc/account/?page=${Page}`)
+              }}>
                 <Row>
                   <Col>
                     <Form.Label>Name</Form.Label>
