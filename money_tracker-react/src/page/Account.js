@@ -8,10 +8,11 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Button from "react-bootstrap/esm/Button";
-import { FaArrowLeft, FaArrowRight, FaFilter } from "react-icons/fa";
+import { FaArrowLeft, FaArrowRight, FaFilter, FaRegTrashAlt } from "react-icons/fa";
 import { MdClose } from "react-icons/md";
 import Modal from 'react-bootstrap/Modal';
-
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
 function Account() {
   const [Error, setError] = useState({
@@ -276,7 +277,7 @@ function Account() {
     })
   }
 
- let renderModalForm = () =>{
+ let renderModalForm = () => {
   return (
     <Modal.Dialog className="mh-75 overflow-auto">
       <Modal.Header>
@@ -286,8 +287,7 @@ function Account() {
       <Modal.Body>
         <Form id="account-create-form">
           <Form.Group className="mb-3">
-            <Form.Label>ID</Form.Label>
-            <Form.Control disabled value={FormId} type="text"/>
+            <Form.Control hidden disabled value={FormId} type="text"/>
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>Name</Form.Label>
@@ -300,7 +300,7 @@ function Account() {
               <option></option>
               {
                 Object.keys(account_type).map(k=>(
-                  <option value={account_type[k]}>{k}</option>
+                  <option key={account_type[k]} value={account_type[k]}>{k}</option>
                 ))
               }
               </Form.Control>
@@ -348,6 +348,43 @@ function Account() {
     </Modal.Dialog>
   )
  }
+
+ let DeleteRecord = (id) => {
+  confirmAlert({
+    title: 'Confirmation',
+    message: 'Are you sure to want to delete the account.',
+    buttons: [
+      {
+        label: 'Yes',
+        onClick: () => {
+          let temp = `http://localhost:8000/api/acc/account/?id=${id}`;
+          let header = {
+            "Content-Type": "application/json",
+            "Authorization": `Token ${token}`
+          }
+        
+          fetch(temp, {
+            method: "DELETE", 
+            headers: header,
+          })
+          .then(reponse =>
+            reponse.json()
+          )
+          .then(data=>{
+            if(data['status']){
+              getData();
+            }
+          })
+          .catch(error => console.log('Error: ' + error.message));
+        }
+      },
+      {
+        label: 'No',
+        onClick: () => {return}
+      }
+    ]
+  });
+};
 
   useRunOnce({
     fn: getData 
@@ -431,16 +468,18 @@ function Account() {
                   <th>Name</th>
                   <th>Balance</th>
                   <th>Description</th>
+                  <th width='5px'></th>
                 </tr>
               </thead>
               <tbody>
                 {
                   Accounts.map(account=>{
                     return (
-                      <tr onClick={(ev)=>OpenEditModal(ev, account.id)} key={account.id}>
-                        <td>{account.name}</td>
-                        <td>{account.balance}</td>
-                        <td>{account.description}</td>
+                      <tr key={account.id}>
+                        <td onClick={(ev)=>OpenEditModal(ev, account.id)}>{account.name}</td>
+                        <td onClick={(ev)=>OpenEditModal(ev, account.id)}>{account.balance}</td>
+                        <td onClick={(ev)=>OpenEditModal(ev, account.id)}>{account.description}</td>
+                        <td onClick={(ev)=>DeleteRecord(account.id)} width='5px'><FaRegTrashAlt /></td>
                       </tr>
                     )
                   })

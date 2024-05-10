@@ -74,14 +74,15 @@ class AccountAPI(APIView):
             serializer.save()
         except:
             return Response({"status":False,"message":"requested data doesnot exist"}, status=status.HTTP_400_BAD_REQUEST)
-        return Response({"status":True,"message":"account detail successfully updated"}, status=status.HTTP_201_CREATED)
+        return Response({"status":True,"message":"account detail successfully updated"}, status=status.HTTP_200_OK)
 
     def delete(self, request, *args, **kwargs):
         try:
-            pk = request.data['id']
+            pk = request.GET.get('id')
             obj = Account.objects.filter(user_id = request.user).get(id = pk)
             obj.delete()
-            return Response({"status":True,"message":"account successfully deleted"},status=status.HTTP_204_NO_CONTENT)
+            print('*********')
+            return Response({"status":True,"message":"account successfully deleted"},status=status.HTTP_200_OK)
         except:
             return Response({"status":False,"message":"requested data doesnot exist"}, status=status.HTTP_400_BAD_REQUEST)
             
