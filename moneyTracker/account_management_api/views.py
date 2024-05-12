@@ -81,7 +81,6 @@ class AccountAPI(APIView):
             pk = request.GET.get('id')
             obj = Account.objects.filter(user_id = request.user).get(id = pk)
             obj.delete()
-            print('*********')
             return Response({"status":True,"message":"account successfully deleted"},status=status.HTTP_200_OK)
         except:
             return Response({"status":False,"message":"requested data doesnot exist"}, status=status.HTTP_400_BAD_REQUEST)
