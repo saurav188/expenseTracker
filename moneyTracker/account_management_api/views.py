@@ -37,7 +37,7 @@ class AccountAPI(APIView):
             except:
                 return Response({"status":False,"message":"requested data doesnot exist"}, status=status.HTTP_400_BAD_REQUEST)
             serializer = AccountSerializer(obj, many=False)
-            return Response({"status":True,"message":"account detail successfully updated","data":serializer.data}, status=status.HTTP_201_CREATED)
+            return Response({"status":True,"message":"account detail successfully updated","data":serializer.data}, status=status.HTTP_200_OK)
             
         else:
             try:
@@ -57,7 +57,7 @@ class AccountAPI(APIView):
                 page_size = 2
                 paginator = Paginator(objs, page_size)
                 serializer = AccountSerializer(paginator.page(page), many=True)
-                return Response({"status":True,"message":"account detail successfully retried","num_pages":paginator.num_pages,"data":serializer.data}, status=status.HTTP_201_CREATED)
+                return Response({"status":True,"message":"account detail successfully retried","num_pages":paginator.num_pages,"data":serializer.data}, status=status.HTTP_200_OK)
             except:
                 return Response({"status":False,"message":"invalid page number"}, status=status.HTTP_400_BAD_REQUEST)
                 
@@ -100,17 +100,18 @@ class CategoryAPI(APIView):
         return Response({"status":True,"message":"category created successfully"}, status=status.HTTP_201_CREATED)
 
     def get(self, request, format=None):
-        if 'id' in request.data.keys():
+        if request.GET.get('id'):
             try:
-                obj = Category.objects.filter(user_id = request.user).get(id = request.data['id'])
+                obj = Category.objects.filter(user_id = request.user).get(id = request.GET.get('id'))
             except:
                 return Response({"status":False,"message":"requested data doesnot exist"}, status=status.HTTP_400_BAD_REQUEST)
             serializer = CategorySerializer(obj, many=False)
+            return Response({"status":True,"message":"category detail successfully updated","data":serializer.data}, status=status.HTTP_200_OK)
         else:
             try:
                 objs = Category.objects.filter(user_id = request.user)
-                if 'name' in request.data.keys():
-                    objs = objs.filter(name__icontains=request.data['name'])
+                if request.GET.get('name'):
+                    objs = objs.filter(name__icontains=request.GET.get('name'))
             except:
                 return Response({"status":False,"message":"requested data doesnot exist"}, status=status.HTTP_400_BAD_REQUEST)
             try:
@@ -118,6 +119,7 @@ class CategoryAPI(APIView):
                 page_size = 2
                 paginator = Paginator(objs, page_size)
                 serializer = CategorySerializer(paginator.page(page), many=True)
+                return Response({"status":True,"message":"category detail successfully retried","num_pages":paginator.num_pages,"data":serializer.data}, status=status.HTTP_200_OK)
             except:
                 return Response({"status":False,"message":"invalid page number"}, status=status.HTTP_400_BAD_REQUEST)
                 
@@ -137,10 +139,10 @@ class CategoryAPI(APIView):
 
     def delete(self, request, *args, **kwargs):
         try:
-            pk = request.data['id']
+            pk = request.GET.get('id')
             obj = Category.objects.filter(user_id = request.user).get(id = pk)
             obj.delete()
-            return Response({"status":True,"message":"category successfully deleted"},status=status.HTTP_204_NO_CONTENT)
+            return Response({"status":True,"message":"category successfully deleted"},status=status.HTTP_200_OK)
         except:
             return Response({"status":False,"message":"requested data doesnot exist"}, status=status.HTTP_400_BAD_REQUEST)
             
@@ -201,7 +203,7 @@ class TransactionAPI(APIView):
             pk = request.data['id']
             obj = Transaction.objects.filter(user_id = request.user).get(id = pk)
             obj.delete()
-            return Response({"status":True,"message":"transaction successfully deleted"},status=status.HTTP_204_NO_CONTENT)
+            return Response({"status":True,"message":"transaction successfully deleted"},status=status.HTTP_200_OK)
         except:
             return Response({"status":False,"message":"requested data doesnot exist"}, status=status.HTTP_400_BAD_REQUEST)
             
