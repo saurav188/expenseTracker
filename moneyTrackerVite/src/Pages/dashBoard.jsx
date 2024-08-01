@@ -1,7 +1,16 @@
+import { NavaBar } from "../components/navBar";
+
 const Dashboard = () => {
   return (
     <>
-      <div className="bg-red-500">Hello DashBoard</div>
+      <NavaBar />
+      <div
+        className=" min-h-screen bg-red-500  
+      text-4xl
+      flex items-center justify-center"
+      >
+        Hello DashBoard
+      </div>
     </>
   );
 };
