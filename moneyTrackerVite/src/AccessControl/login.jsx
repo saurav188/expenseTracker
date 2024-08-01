@@ -2,7 +2,6 @@ import { Button, Input } from "antd";
 import Form from "antd/es/form/Form";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import "../global.css";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -17,7 +16,7 @@ const Login = () => {
       navigate("/dashboard");
       console.log("successfully loggedIn");
     } catch (error) {
-      console.log(error);
+      console.log("Failed To LogIn");
     }
   };
 
