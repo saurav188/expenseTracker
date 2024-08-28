@@ -1,0 +1,213 @@
+{
+	"info": {
+		"_postman_id": "651ea1ef-5189-4810-a438-787165a415c8",
+		"name": "Account Management",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_uid": "24267665-651ea1ef-5189-4810-a438-787165a415c8"
+	},
+	"item": [
+		{
+			"name": "Create an Account",
+			"id": "9fd877c0-2310-4482-9bbf-11f621f1c5e2",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token ca167e1bb3f8ebf4e489f3c3e3475448228b0d7b",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "account_test",
+							"type": "text"
+						},
+						{
+							"key": "account_type",
+							"value": "SVG",
+							"type": "text"
+						},
+						{
+							"key": "theme_color_hash",
+							"value": "#ffffff",
+							"type": "text"
+						},
+						{
+							"key": "theme_icon_fa_class",
+							"value": "fa_money",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "description....",
+							"type": "text"
+						},
+						{
+							"key": "show_card",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "show_pie",
+							"value": "0",
+							"type": "text"
+						},
+						{
+							"key": "show_line",
+							"value": "0",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/acc/account/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"acc",
+						"account",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List Accounts",
+			"id": "67b3d71c-a0b5-4c13-bc19-7e92d95f3eb5",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token ca167e1bb3f8ebf4e489f3c3e3475448228b0d7b",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/acc/account/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"acc",
+						"account",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Account Details",
+			"id": "e6392dc1-93f4-464d-82f5-4a92a74f1072",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token ca167e1bb3f8ebf4e489f3c3e3475448228b0d7b",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/acc/account/?id=16",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"acc",
+						"account",
+						""
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "16",
+							"type": "text"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Account Details",
+			"id": "da724edc-1210-42e0-9a0f-8dcd7232f9cd",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token ca167e1bb3f8ebf4e489f3c3e3475448228b0d7b",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "id",
+							"value": "16",
+							"type": "text"
+						},
+						{
+							"key": "show_card",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/acc/account/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"acc",
+						"account",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
