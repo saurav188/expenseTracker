@@ -7,207 +7,485 @@
 	},
 	"item": [
 		{
-			"name": "Create an Account",
-			"id": "9fd877c0-2310-4482-9bbf-11f621f1c5e2",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Token ca167e1bb3f8ebf4e489f3c3e3475448228b0d7b",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "name",
-							"value": "account_test",
-							"type": "text"
+			"name": "Account",
+			"item": [
+				{
+					"name": "Create an Account",
+					"id": "9fd877c0-2310-4482-9bbf-11f621f1c5e2",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token ca167e1bb3f8ebf4e489f3c3e3475448228b0d7b",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "account_test",
+									"type": "text"
+								},
+								{
+									"key": "account_type",
+									"value": "SVG",
+									"type": "text"
+								},
+								{
+									"key": "theme_color_hash",
+									"value": "#ffffff",
+									"type": "text"
+								},
+								{
+									"key": "theme_icon_fa_class",
+									"value": "fa_money",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "description....",
+									"type": "text"
+								},
+								{
+									"key": "show_card",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "show_pie",
+									"value": "0",
+									"type": "text"
+								},
+								{
+									"key": "show_line",
+									"value": "0",
+									"type": "text"
+								}
+							]
 						},
-						{
-							"key": "account_type",
-							"value": "SVG",
-							"type": "text"
-						},
-						{
-							"key": "theme_color_hash",
-							"value": "#ffffff",
-							"type": "text"
-						},
-						{
-							"key": "theme_icon_fa_class",
-							"value": "fa_money",
-							"type": "text"
-						},
-						{
-							"key": "description",
-							"value": "description....",
-							"type": "text"
-						},
-						{
-							"key": "show_card",
-							"value": "1",
-							"type": "text"
-						},
-						{
-							"key": "show_pie",
-							"value": "0",
-							"type": "text"
-						},
-						{
-							"key": "show_line",
-							"value": "0",
-							"type": "text"
+						"url": {
+							"raw": "http://localhost:8000/api/acc/account/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"acc",
+								"account",
+								""
+							]
 						}
-					]
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:8000/api/acc/account/",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8000",
-					"path": [
-						"api",
-						"acc",
-						"account",
-						""
-					]
+				{
+					"name": "List Accounts",
+					"id": "67b3d71c-a0b5-4c13-bc19-7e92d95f3eb5",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token ca167e1bb3f8ebf4e489f3c3e3475448228b0d7b",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/acc/account/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"acc",
+								"account",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Account Details",
+					"id": "e6392dc1-93f4-464d-82f5-4a92a74f1072",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token ca167e1bb3f8ebf4e489f3c3e3475448228b0d7b",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/acc/account/?id=16",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"acc",
+								"account",
+								""
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "16",
+									"type": "text"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Account Details",
+					"id": "da724edc-1210-42e0-9a0f-8dcd7232f9cd",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token ca167e1bb3f8ebf4e489f3c3e3475448228b0d7b",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "id",
+									"value": "16",
+									"type": "text"
+								},
+								{
+									"key": "show_card",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/acc/account/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"acc",
+								"account",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Account Details Copy",
+					"id": "86c3adde-49aa-4f9f-821a-e6c2f3411727",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token ca167e1bb3f8ebf4e489f3c3e3475448228b0d7b",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/acc/account/?id=16",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"acc",
+								"account",
+								""
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "16"
+								}
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			],
+			"id": "4a02a4c8-4859-4dc7-a09b-987da5fa3382"
 		},
 		{
-			"name": "List Accounts",
-			"id": "67b3d71c-a0b5-4c13-bc19-7e92d95f3eb5",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Token ca167e1bb3f8ebf4e489f3c3e3475448228b0d7b",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "formdata",
-					"formdata": []
-				},
-				"url": {
-					"raw": "http://localhost:8000/api/acc/account/",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8000",
-					"path": [
-						"api",
-						"acc",
-						"account",
-						""
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get Account Details",
-			"id": "e6392dc1-93f4-464d-82f5-4a92a74f1072",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Token ca167e1bb3f8ebf4e489f3c3e3475448228b0d7b",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "formdata",
-					"formdata": []
-				},
-				"url": {
-					"raw": "http://localhost:8000/api/acc/account/?id=16",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8000",
-					"path": [
-						"api",
-						"acc",
-						"account",
-						""
-					],
-					"query": [
-						{
-							"key": "id",
-							"value": "16",
-							"type": "text"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Update Account Details",
-			"id": "da724edc-1210-42e0-9a0f-8dcd7232f9cd",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "PATCH",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Token ca167e1bb3f8ebf4e489f3c3e3475448228b0d7b",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "id",
-							"value": "16",
-							"type": "text"
+			"name": "Category",
+			"item": [
+				{
+					"name": "Create an Category",
+					"id": "f55095c4-83ca-4d8b-ba6a-ef42db6c26ce",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token ca167e1bb3f8ebf4e489f3c3e3475448228b0d7b",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "category_test",
+									"type": "text"
+								},
+								{
+									"key": "category_type",
+									"value": "INC",
+									"type": "text"
+								},
+								{
+									"key": "theme_color_hash",
+									"value": "#ffffff",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "description....",
+									"type": "text"
+								}
+							]
 						},
-						{
-							"key": "show_card",
-							"value": "1",
-							"type": "text"
+						"url": {
+							"raw": "http://localhost:8000/api/acc/category/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"acc",
+								"category",
+								""
+							]
 						}
-					]
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:8000/api/acc/account/",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8000",
-					"path": [
-						"api",
-						"acc",
-						"account",
-						""
-					]
+				{
+					"name": "List Categories",
+					"id": "74f881f5-d9d7-4374-8f6d-6eb9e71684a1",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token ca167e1bb3f8ebf4e489f3c3e3475448228b0d7b",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/acc/category/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"acc",
+								"category",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Category Details",
+					"id": "40f5d072-fb9b-4a87-befb-9d441d83779c",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token ca167e1bb3f8ebf4e489f3c3e3475448228b0d7b",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/acc/category/?id=6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"acc",
+								"category",
+								""
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "6"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Category Details",
+					"id": "f6bc8b73-4c09-4d23-a941-6046642ab4e5",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token ca167e1bb3f8ebf4e489f3c3e3475448228b0d7b",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "id",
+									"value": "6",
+									"type": "text"
+								},
+								{
+									"key": "name",
+									"value": "patched name",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/acc/category/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"acc",
+								"category",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Account Details Copy",
+					"id": "a956674c-24b3-4639-8de5-d843a55f448f",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token ca167e1bb3f8ebf4e489f3c3e3475448228b0d7b",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/acc/category/?id=6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"acc",
+								"category",
+								""
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "6"
+								}
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			],
+			"id": "8d97aee7-71ad-4917-ad70-eefee6fec84f"
 		}
 	]
 }
