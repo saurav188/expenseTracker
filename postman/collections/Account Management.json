@@ -213,7 +213,7 @@
 					"response": []
 				},
 				{
-					"name": "Delete Account Details Copy",
+					"name": "Delete Account",
 					"id": "86c3adde-49aa-4f9f-821a-e6c2f3411727",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
@@ -486,6 +486,236 @@
 				}
 			],
 			"id": "8d97aee7-71ad-4917-ad70-eefee6fec84f"
+		},
+		{
+			"name": "Transaction",
+			"item": [
+				{
+					"name": "Create an Transaction",
+					"id": "ba311be0-1cf2-48d0-ace2-0d6556a3ef2c",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token ca167e1bb3f8ebf4e489f3c3e3475448228b0d7b",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "account_id",
+									"value": "17",
+									"type": "text"
+								},
+								{
+									"key": "category_id",
+									"value": "7",
+									"type": "text"
+								},
+								{
+									"key": "note",
+									"value": "note....",
+									"type": "text"
+								},
+								{
+									"key": "amount",
+									"value": "5000",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/acc/transaction/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"acc",
+								"transaction",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Transaction",
+					"id": "f21e4d1e-2026-4f00-be98-7ede16380368",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token ca167e1bb3f8ebf4e489f3c3e3475448228b0d7b",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/acc/transaction/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"acc",
+								"transaction",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Transaction Details",
+					"id": "55fd46d5-ac3d-489f-87a8-90d196a5961a",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token ca167e1bb3f8ebf4e489f3c3e3475448228b0d7b",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/acc/transaction/?id=5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"acc",
+								"transaction",
+								""
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Transaction Details",
+					"id": "19dcbb9a-7405-4671-8ef8-48e723e3bb3d",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token ca167e1bb3f8ebf4e489f3c3e3475448228b0d7b",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "id",
+									"value": "5",
+									"type": "text"
+								},
+								{
+									"key": "amount",
+									"value": "5",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/acc/transaction/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"acc",
+								"transaction",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Transaction",
+					"id": "f5685bc8-1b67-46bd-8b52-65ff9b039364",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token ca167e1bb3f8ebf4e489f3c3e3475448228b0d7b",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/acc/transaction/?id=5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"acc",
+								"transaction",
+								""
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "ce6ea219-d703-4817-957f-7ac9e5bda0aa"
 		}
 	]
 }
