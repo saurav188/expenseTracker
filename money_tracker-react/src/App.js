@@ -12,7 +12,7 @@ import PasswordResetEmail from "./page/PasswordResetEmail";
 import PasswordResetConfirm from "./page/PasswordResetConfirm";
 import Error from "./page/Error";
 import { useState } from "react";
-import Transaction from "./page/Transaction";
+import Transaction from "./page/Transaction/Transaction";
 
 function App() {
   function getToken() {
