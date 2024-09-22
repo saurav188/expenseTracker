@@ -22,49 +22,16 @@ function NavBar(props) {
     {
       key: "1",
       label: (
-        <button onClick={() => Logout(navigate, sessionStorage)}>Logout</button>
-
-        //       <Nav.Link href="#" onClick={() => Logout(navigate, sessionStorage)}>
-        // //           Logout
-        // //         </Nav.Link>
-        //         <MenuBar path={"/user-detail"} name="My Profile" />
-        //       </>
-        // <a
-        //   target="_blank"
-        //   rel="noopener noreferrer"
-        //   href="https://www.antgroup.com"
-        // >
-        //   1st menu item
-        // </a>
+        <button onClick={() => navigate("/user-detail")}>My Profile</button>
       ),
     },
     {
       key: "2",
       label: (
-        <button onClick={() => navigate("/user-detail")}>My Profile</button>
+        <button onClick={() => Logout(navigate, sessionStorage)}>Logout</button>
       ),
     },
   ];
-
-  // let profileComp = () => {
-  //   if (getToken()) {
-  //     return (
-  //       <>
-  //         <Nav.Link href="#" onClick={() => Logout(navigate, sessionStorage)}>
-  //           Logout
-  //         </Nav.Link>
-  //         <MenuBar path={"/user-detail"} name="My Profile" />
-  //       </>
-  //     );
-  //   } else {
-  //     return (
-  //       <>
-  //         <MenuBar path={"/login"} name="Login" />
-  //         <MenuBar path={"/registration"} name="Sign Up" />
-  //       </>
-  //     );
-  //   }
-  // };
 
   return (
     <Navbar collapseOnSelect expand="lg" className="bg-zinc-500">

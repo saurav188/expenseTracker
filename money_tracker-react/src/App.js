@@ -5,7 +5,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Dashboard from "./page/Dashboard";
 import Account from "./page/Account";
 import Category from "./page/Category";
-import Transaction from "./page/Transaction";
 import Login from "./page/Login";
 import Registration from "./page/Registration";
 import UserDetail from "./page/UserDetail";
@@ -13,6 +12,7 @@ import PasswordResetEmail from "./page/PasswordResetEmail";
 import PasswordResetConfirm from "./page/PasswordResetConfirm";
 import Error from "./page/Error";
 import { useState } from "react";
+import Transaction from "./page/Transaction";
 
 function App() {
   function getToken() {
@@ -29,6 +29,7 @@ function App() {
         <Route exact path="/account" element={<Account />} />
         <Route exact path="/category" element={<Category />} />
         <Route exact path="/transaction" element={<Transaction />} />
+        {/* // <Route exact path="/transaction" element={<Transaction />} /> */}
         <Route exact path="/login" element={<Login />} />
         <Route exact path="/registration" element={<Registration />} />
         <Route exact path="/user-detail" element={<UserDetail />} />
