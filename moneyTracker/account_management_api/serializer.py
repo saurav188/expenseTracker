@@ -105,15 +105,19 @@ class CategorySerializer(serializers.ModelSerializer):
         return category
 
 class TransactionSerializer(serializers.ModelSerializer):
-    account_id = serializers.StringRelatedField(read_only=True, many=False)
-    category_id = serializers.StringRelatedField(read_only=True, many=False)
+    account_id = serializers.PrimaryKeyRelatedField(queryset=Account.objects.all(), write_only=True)
+    account_name = serializers.SerializerMethodField(read_only=True)
+    category_id = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), write_only=True)
+    category_name = serializers.SerializerMethodField(read_only=True)
     
     class Meta:
         model = Transaction
         fields = (
             'id',
             'account_id',
+            'account_name',  # To display account name in GET requests
             'category_id',
+            'category_name',  # To display category name in GET requests
             'amount',
             'trn_date',
             'note',
@@ -123,11 +127,17 @@ class TransactionSerializer(serializers.ModelSerializer):
             'category_id': {'required': True},
             'amount': {'required': True},
         }
-        
+
+    def get_account_name(self, obj):
+        return str(obj.account_id)  # Assuming account_id has a __str__() method returning rec name
+
+    def get_category_name(self, obj):
+        return str(obj.category_id)  # Assuming category_id has a __str__() method returning rec name
+   
+     
     def validate(self, attrs):
         if 'amount' in attrs.keys() and attrs['amount'] < 0:
             raise serializers.ValidationError({"amount": "amount cannot be less than zero"})
-
         return attrs
 
     def create(self, validated_data):
