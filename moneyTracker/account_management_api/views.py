@@ -200,10 +200,13 @@ class TransactionAPI(APIView):
 
     def delete(self, request, *args, **kwargs):
         try:
-            pk = request.data['id']
+            pk = request.GET.get('id')
             obj = Transaction.objects.filter(user_id = request.user).get(id = pk)
-            obj.delete()
-            return Response({"status":True,"message":"transaction successfully deleted"},status=status.HTTP_200_OK)
+            if obj:
+                obj.delete()
+                return Response({"status":True,"message":"transaction successfully deleted"},status=status.HTTP_200_OK)
+            else:
+                return Response({"status":False,"message":"Requested transaction doesnot exist"}, status=status.HTTP_400_BAD_REQUEST)
         except:
-            return Response({"status":False,"message":"requested data doesnot exist"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"status":False,"message":"Exception occured while deleting"}, status=status.HTTP_400_BAD_REQUEST)
             

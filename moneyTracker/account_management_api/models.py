@@ -68,6 +68,7 @@ class Transaction(models.Model):
     account_id = models.ForeignKey("account_management_api.Account", verbose_name=_("Account"), on_delete=models.CASCADE)
     category_id = models.ForeignKey("account_management_api.Category", verbose_name=_("Category"), on_delete=models.CASCADE)
     amount = models.IntegerField(_("Amount"))
+    trn_date = models.DateTimeField(_("Transaction Date"), null=False, blank=False)
     note = models.TextField(_("Note"), null=True, blank=True)
 
     class Meta:

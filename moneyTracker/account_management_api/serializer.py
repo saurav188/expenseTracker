@@ -105,7 +105,9 @@ class CategorySerializer(serializers.ModelSerializer):
         return category
 
 class TransactionSerializer(serializers.ModelSerializer):
-
+    account_id = serializers.StringRelatedField(read_only=True, many=False)
+    category_id = serializers.StringRelatedField(read_only=True, many=False)
+    
     class Meta:
         model = Transaction
         fields = (
@@ -113,6 +115,7 @@ class TransactionSerializer(serializers.ModelSerializer):
             'account_id',
             'category_id',
             'amount',
+            'trn_date',
             'note',
         )
         extra_kwargs = {
@@ -139,6 +142,7 @@ class TransactionSerializer(serializers.ModelSerializer):
             account_id=validated_data['account_id'],
             category_id=validated_data['category_id'],
             amount=validated_data['amount'],
+            trn_date=validated_data['trn_date']
         )
         
         if 'note' in validated_data.keys():
