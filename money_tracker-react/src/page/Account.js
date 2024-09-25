@@ -287,7 +287,7 @@ function Account() {
               <Form.Control hidden disabled value={FormId} type="text" />
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label>Name</Form.Label>
+              <Form.Label>Bank Name</Form.Label>
               <Form.Control
                 value={FormName}
                 onChange={(ev) => setFormName(ev.target.value)}
