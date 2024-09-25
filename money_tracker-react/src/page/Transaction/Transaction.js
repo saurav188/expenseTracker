@@ -4,16 +4,17 @@ import Button from "react-bootstrap/esm/Button";
 import Table from "react-bootstrap/esm/Table";
 import getToken from "../../hooks/GetToken";
 import NavBar from "../../components/NavbarHeader";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
-import ButtonGroup from "antd/es/button/button-group";
+import { FaArrowLeft, FaArrowRight, FaRegTrashAlt } from "react-icons/fa";
 import CreateTransaction from "./CreateTransaction";
+import { confirmAlert } from "react-confirm-alert";
 
 const Transaction = () => {
   const token = getToken(); // Assumed that getToken() provides the token
   const [transactionData, setTransactionData] = useState([]);
+  const [accountId, setAccountId] = useState();
   const [error, setError] = useState(null);
 
-  const fetchTransaction = async () => {
+  const getTransactionData = async () => {
     let header = {
       "Content-Type": "application/json",
       Authorization: `Token ${token}`,
@@ -30,21 +31,57 @@ const Transaction = () => {
           },
         }
       );
-
-      // Assuming response.data is an array of transaction objects
       setTransactionData(response.data);
-
-      // Logging the data for debugging
-      console.log(response.data);
     } catch (err) {
       setError("Error fetching transaction data");
       console.error(err);
     }
   };
   useEffect(() => {
-    fetchTransaction();
+    getTransactionData();
   }, []);
 
+  // debugger;
+  // delete
+  let DeleteRecord = (id) => {
+    confirmAlert({
+      title: "Confirmation",
+      message: "Are you sure to want to delete this Transaction.",
+
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => {
+            let temp = `http://localhost:8000/api/acc/transaction/?id=${id}`;
+            let header = {
+              "Content-Type": "application/json",
+              Authorization: `Token ${token}`,
+            };
+
+            fetch(temp, {
+              method: "DELETE",
+              headers: header,
+            })
+              .then((reponse) => {
+                return reponse.json();
+              })
+              .then((data) => {
+                if (data["status"]) {
+                  getTransactionData();
+                }
+              })
+              .catch((error) => console.log("Error: " + error.message));
+          },
+        },
+        {
+          label: "No",
+          onClick: () => {
+            return;
+          },
+        },
+      ],
+    });
+  };
   return (
     <div>
       <NavBar />
@@ -57,10 +94,11 @@ const Transaction = () => {
           <thead>
             <tr>
               <th>S.N</th>
-              <th>Account ID</th>
-              <th>Category ID</th>
+              <th>Account</th>
+              <th>Category</th>
               <th>Amount</th>
               <th>Note</th>
+              {/* <th>Action</th> */}
             </tr>
           </thead>
           <tbody>
@@ -71,6 +109,9 @@ const Transaction = () => {
                 <td>{transaction.category_id}</td>
                 <td>{transaction.amount}</td>
                 <td>{transaction.note || "No Note"}</td>
+                <td onClick={(ev) => DeleteRecord(transaction.id)} width="5px">
+                  <FaRegTrashAlt />
+                </td>
               </tr>
             ))}
           </tbody>

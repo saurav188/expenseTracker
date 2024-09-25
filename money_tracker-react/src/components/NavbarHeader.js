@@ -5,17 +5,30 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import MenuBar from "../components/MenuBar";
 import getToken from "../hooks/GetToken";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Logout from "../hooks/Logout";
 import { useNavigate } from "react-router-dom";
 import { Dropdown, Space } from "antd";
+import axios from "axios";
 
 function NavBar(props) {
+  const token = getToken();
   const navigate = useNavigate();
-  const [user, setUser] = useState("Rodish");
+  const [user, setUser] = useState("User");
+  useEffect(() => {
+    userDetails();
+  });
 
-  const userButtonHandle = () => {
-    return <></>;
+  const userDetails = async () => {
+    const response = await axios.get(
+      `http://localhost:8000/api/auth/user/detail/`,
+      {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      }
+    );
+    setUser(response.data.data.username);
   };
 
   const items = [

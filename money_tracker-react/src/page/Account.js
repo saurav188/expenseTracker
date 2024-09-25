@@ -323,26 +323,7 @@ function Account() {
               />
               {Error["balance"]}
             </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Theme Color</Form.Label>
-              <Form.Control
-                value={FormThemeColor}
-                onChange={(ev) => setFormThemeColor(ev.target.value)}
-                type="text"
-                placeholder="Enter theme color"
-              />
-              {Error["theme_color"]}
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Theme Icon fa class </Form.Label>
-              <Form.Control
-                value={FormThemeIcon}
-                onChange={(ev) => setFormThemeIcon(ev.target.value)}
-                type="text"
-                placeholder="Enter theme icon"
-              />
-              {Error["theme_icon"]}
-            </Form.Group>
+
             <Form.Group className="mb-3">
               <Form.Label>Description</Form.Label>
               <Form.Control
