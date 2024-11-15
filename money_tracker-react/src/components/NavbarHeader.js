@@ -10,6 +10,7 @@ import Logout from "../hooks/Logout";
 import { useNavigate } from "react-router-dom";
 import { Dropdown, Space } from "antd";
 import axios from "axios";
+import { iconColor } from "../page/Login";
 
 function NavBar(props) {
   const token = getToken();
@@ -47,7 +48,8 @@ function NavBar(props) {
   ];
 
   return (
-    <Navbar collapseOnSelect expand="lg" className="bg-zinc-500">
+    <Navbar collapseOnSelect expand="lg" className="" 
+     style={{backgroundColor:iconColor}}>
       <Container>
         <Navbar.Brand href="/dashboard" className="text-white">
           MoneyTracker
