@@ -1,7 +1,7 @@
-import React from "react";
-import { useState } from "react";
-import "../style/login.css";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import "../style/login.css";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 
@@ -12,73 +12,70 @@ function Login() {
   const [loggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
 
-  // const navigate = useNavigate()
-
   function setToken(userToken) {
     sessionStorage.setItem("moneyTrackertoken", JSON.stringify(userToken));
   }
 
-  const LoginFunction = (e) => {
-    setLoginError("sent successfully");
+  const LoginFunction = async (e) => {
+    e.preventDefault();
+    setLoginError("Attempting to log in...");
+
     let data = {
       username: username,
       password: password,
     };
-    let url = "http://localhost:8000/api/auth/user/login/";
-    let header = {
-      "Content-Type": "application/json",
-    };
 
-    fetch(url, {
-      method: "POST",
-      headers: header,
-      // mode: "no-cors",
-      body: JSON.stringify(data),
-    })
-      .then((reponse) => reponse.json())
-      .then((data) => {
-        if (data["status"]) {
-          setToken(data["token"]);
-          setLoggedIn(true);
-          navigate("/dashboard");
-        } else sessionStorage.removeItem("itemName");
-      })
-      .catch((error) => console.log("Error: " + error.message));
+    try {
+      const response = await axios.post("http://localhost:8000/api/auth/user/login/", data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.data.status) {
+        setToken(response.data.token);
+        setLoggedIn(true);
+        navigate("/dashboard");
+      } else {
+        sessionStorage.removeItem("moneyTrackertoken");
+        setLoginError("Login failed. Please check your credentials.");
+      }
+    } catch (error) {
+      console.log("Error: " + error.message);
+      setLoginError("An error occurred. Please try again.");
+    }
   };
 
   return (
-    <>
-      <div className="main-container">
-        <div className="form-container w-50">
-          <Form>
-            <h1 className="form-title">Login</h1> <br />
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>Username</Form.Label>
-              <Form.Control
-                onChange={(ev) => setUsername(ev.target.value)}
-                type="text"
-                placeholder="Enter username"
-              />
-              
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                onChange={(ev) => setPassword(ev.target.value)}
-                type="password"
-                placeholder="Password"
-              />
-            </Form.Group>
-            {/* <Form.Group className="mb-3" controlId="formBasicCheckbox">
-              <Form.Check type="checkbox" label="Check me out" />
-            </Form.Group> */}
-            <Button onClick={LoginFunction} variant="primary">
-              Login
-            </Button>
-          </Form>
-        </div>
+    <div className="main-container">
+      <div className="form-container w-50">
+        <Form onSubmit={LoginFunction}>
+          <h1 className="form-title">Login</h1> <br />
+          <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Label>Username</Form.Label>
+            <Form.Control
+              onChange={(ev) => setUsername(ev.target.value)}
+              type="text"
+              placeholder="Enter username"
+              value={username}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="formBasicPassword">
+            <Form.Label>Password</Form.Label>
+            <Form.Control
+              onChange={(ev) => setPassword(ev.target.value)}
+              type="password"
+              placeholder="Password"
+              value={password}
+            />
+          </Form.Group>
+          {loginError && <p className="text-danger">{loginError}</p>}
+          <Button type="submit" variant="primary">
+            Login
+          </Button>
+        </Form>
       </div>
-    </>
+    </div>
   );
 }
 
