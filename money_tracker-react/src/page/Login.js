@@ -1,9 +1,7 @@
 import React from "react";
-import NavbarHeader from "../components/NavbarHeader";
 import { useState } from "react";
 import "../style/login.css";
 import { useNavigate } from "react-router-dom";
-import getToken from "../hooks/GetToken";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 
@@ -61,9 +59,7 @@ function Login() {
                 type="text"
                 placeholder="Enter username"
               />
-              {/* <Form.Text className="text-muted">
-                Your username here...
-              </Form.Text> */}
+              
             </Form.Group>
             <Form.Group className="mb-3" controlId="formBasicPassword">
               <Form.Label>Password</Form.Label>
