@@ -4,6 +4,7 @@ from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
 from .models import Account, Category, Transaction
 from auth_api.models import User
+import datetime
 
 class AccountSerializer(serializers.ModelSerializer):
 
@@ -126,6 +127,7 @@ class TransactionSerializer(serializers.ModelSerializer):
             'account_id': {'required': True},
             'category_id': {'required': True},
             'amount': {'required': True},
+            'trn_date': {'required': False},
         }
 
     def get_account_name(self, obj):
@@ -147,6 +149,8 @@ class TransactionSerializer(serializers.ModelSerializer):
             user = User.objects.get(id = validated_data["user_id"])
         elif request and hasattr(request, "user"):
             user = request.user
+        if 'trn_date' not in validated_data.keys():
+            validated_data['trn_date'] = datetime.datetime.now()
         transaction = Transaction.objects.create(
             user_id=user,
             account_id=validated_data['account_id'],
