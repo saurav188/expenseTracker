@@ -42,7 +42,7 @@ class AccountAPI(APIView):
             except:
                 return Response({"status":False,"message":"requested data doesnot exist"}, status=status.HTTP_400_BAD_REQUEST)
             serializer = AccountSerializer(obj, many=False)
-            return Response({"status":True,"message":"account detail successfully updated","data":serializer.data}, status=status.HTTP_200_OK)
+            return Response({"status":True,"message":"account detail retrieved successfully","data":serializer.data}, status=status.HTTP_200_OK)
             
         else:
             try:

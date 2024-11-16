@@ -1,12 +1,13 @@
 from django.db import models
 from django.utils.translation import gettext as _
+from django.db.models import Sum, F, Case, When
 # Create your models here.
 
 class Account(models.Model):
     user_id = models.ForeignKey("auth.User", verbose_name=_("Owner"), on_delete=models.CASCADE)
     name = models.CharField(max_length=200, unique=True)
     description = models.TextField(_("Description"), null=True, blank=True)
-    balance = models.FloatField(_("Balance"), default=0)
+    # balance = models.FloatField(_("Balance"), default=0)
     show_card = models.BooleanField(_("Show Card"), default=False)
     show_pie = models.BooleanField(_("Show Pie Chart"), default=False)
     show_line = models.BooleanField(_("Show in Line Chart"), default=False)
@@ -26,6 +27,21 @@ class Account(models.Model):
         choices= ACCOUNT_TYPE_CHOICE ,
         default=CHECKING,
     )
+    
+    @property
+    def balance(self):
+        # print(self.transactions.values_list('amount', flat=True))
+        transactions = self.transactions.aggregate(
+            total_balance = Sum(
+                Case(
+                    When(category_id__category_type=Category.INCOME, then=F('amount')),
+                    When(category_id__category_type=Category.EXPENSE, then=-F('amount')),
+                    default=0,
+                    output_field=models.FloatField()
+                )
+            )
+        )
+        return transactions['total_balance'] or 0
 
     def __str__(self):
         return self.name
@@ -65,8 +81,8 @@ class Category(models.Model):
 
 class Transaction(models.Model):
     user_id = models.ForeignKey("auth.User", verbose_name=_("Owner"), on_delete=models.CASCADE)
-    account_id = models.ForeignKey("account_management_api.Account", verbose_name=_("Account"), on_delete=models.CASCADE)
-    category_id = models.ForeignKey("account_management_api.Category", verbose_name=_("Category"), on_delete=models.CASCADE)
+    account_id = models.ForeignKey("account_management_api.Account", related_name='transactions', verbose_name=_("Account"), on_delete=models.CASCADE)
+    category_id = models.ForeignKey("account_management_api.Category", related_name='transactions', verbose_name=_("Category"), on_delete=models.CASCADE)
     amount = models.IntegerField(_("Amount"))
     trn_date = models.DateTimeField(_("Transaction Date"), null=False, blank=False)
     note = models.TextField(_("Note"), null=True, blank=True)

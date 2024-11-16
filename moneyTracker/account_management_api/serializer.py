@@ -7,31 +7,29 @@ from auth_api.models import User
 import datetime
 
 class AccountSerializer(serializers.ModelSerializer):
+    balance = serializers.ReadOnlyField()
 
     class Meta:
         model = Account
-        fields = (
+        fields = [
             'id',
             'name',
             'description',
             'balance',
             'account_type',
-            'show_card',
-            'show_pie',
-            'show_line',
-            'theme_color_hash',
-            'theme_icon_fa_class',
-        )
+            # 'show_card',
+            # 'show_pie',
+            # 'show_line',
+            # 'theme_color_hash',
+            # 'theme_icon_fa_class',
+        ]
         extra_kwargs = {
             'name': {'required': True},
             'account_type': {'required': True},
-            'theme_color_hash': {'required': True},
+            'theme_color_hash': {'required': False},
         }
         
     def validate(self, attrs):
-        if 'balance' in attrs.keys() and attrs['balance'] < 0:
-            raise serializers.ValidationError({"balance": "Balance cannot be less than zero"})
-
         return attrs
 
     def create(self, validated_data):
@@ -50,8 +48,6 @@ class AccountSerializer(serializers.ModelSerializer):
         
         if 'description' in validated_data.keys():
             account.description = validated_data['description']
-        if 'balance' in validated_data.keys():
-            account.balance = validated_data['balance']
         if 'show_card' in validated_data.keys():
             account.show_card = validated_data['show_card']
         if 'show_pie' in validated_data.keys():
