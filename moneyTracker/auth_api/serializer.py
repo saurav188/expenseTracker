@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import User
+from account_management_api.models import Category
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
 
@@ -28,6 +29,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data):
+        print('*****************')
         user = User.objects.create(
             username=validated_data['username'],
             email=validated_data['email'],
@@ -43,6 +45,19 @@ class RegistrationSerializer(serializers.ModelSerializer):
             user.profile_picture = validated_data['profile_picture']
         
         user.set_password(validated_data['password'])
+        
+        categories = ['Bills', 'Credit', 'Eating', 'Health', 'Housing', 'leisure',
+       'Mortgages', 'Other', 'Profit', 'Shopping', 'Taxes', 'Transfers',
+       'Travels', 'Wages']
+        for i in range(len(categories)):
+            temp_cat = Category.objects.create(
+                user_id = user,
+                name = categories[i],
+                description = '',
+                category_type = 'EXP'
+            )
+            temp_cat.save()
+        
         user.save()
 
         return user
