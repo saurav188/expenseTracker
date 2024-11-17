@@ -16,7 +16,7 @@ from rest_framework.pagination import PageNumberPagination
 from django.core.paginator import Paginator
 import datetime
 import pytz
-from .utils import get_time_series
+from .utils import get_time_series, get_category
 
 utc=pytz.UTC
 
@@ -151,6 +151,23 @@ class CategoryAPI(APIView):
         except:
             return Response({"status":False,"message":"requested data doesnot exist"}, status=status.HTTP_400_BAD_REQUEST)
 
+class ExpenseClassification(APIView):
+    authentication_classes = [TokenAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, format= None):
+        remarks = request.data['remarks']
+        
+        return Response({
+                "status":True,
+                "message":"forecasting successfully",
+                "data":get_category(remarks)
+            },
+            status = status.HTTP_200_OK
+        )
+        
+        
+        
 class TimeSeriesAPI(APIView):
     authentication_classes = [TokenAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
