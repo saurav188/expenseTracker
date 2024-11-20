@@ -8,7 +8,7 @@ import MoneyTrackerLogo1 from "../assets/Logo/MoneyTrackerLogo1.png";
 export const iconColor = "rgb(114,196,144)";
 
 function Login() {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
@@ -23,7 +23,7 @@ function Login() {
     setLoginError("Attempting to log in...");
 
     let data = {
-      username: username,
+      email: email,
       password: password,
     };
 
@@ -77,13 +77,13 @@ function Login() {
               <h1 className="text-center text-2xl font-bold mb-6">Login</h1>
 
               <div className="mb-4">
-                <label htmlFor="username" className="block text-sm font-semibold mb-2">Username</label>
+                <label htmlFor="email" className="block text-sm font-semibold mb-2">Email</label>
                 <input
-                  id="username"
+                  id="email"
                   type="text"
-                  placeholder="Enter username"
-                  value={username}
-                  onChange={(ev) => setUsername(ev.target.value)}
+                  placeholder="Enter Email"
+                  value={email}
+                  onChange={(ev) => setEmail(ev.target.value)}
                   className="w-full p-3 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
               </div>

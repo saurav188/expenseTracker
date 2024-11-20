@@ -49,7 +49,11 @@ class LoginAPI(APIView):
         if not serializer.is_valid():
             return Response({"status":False,"message":serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
         # serializer.save()
-        user = authenticate(username = serializer.data['username'], password = serializer.data['password'])
+        try:
+            u_name = User.objects.get(email = serializer.data['email']).username
+            user = authenticate(username = u_name, password = serializer.data['password'])
+        except:
+            return Response({"status":False,"message":serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
         if not user:
             return Response({"status":False,"message":serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
