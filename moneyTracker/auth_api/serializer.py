@@ -37,13 +37,6 @@ class RegistrationSerializer(serializers.ModelSerializer):
             last_name=validated_data['last_name'],
         )
         
-        if validated_data.get('phone_no'):
-            user.phone_no = validated_data['phone_no']
-        if validated_data.get('address'):
-            user.address = validated_data['address']
-        if validated_data.get('profile_picture'):
-            user.profile_picture = validated_data['profile_picture']
-        
         user.set_password(validated_data['password'])
         
         categories = ['Bills', 'Credit', 'Eating', 'Health', 'Housing', 'leisure',

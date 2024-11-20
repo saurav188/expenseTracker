@@ -49,7 +49,7 @@ class Account(models.Model):
 
 class Category(models.Model):
     user_id = models.ForeignKey("auth.User", verbose_name=_("Owner"), on_delete=models.CASCADE)
-    name = models.CharField(max_length=200, unique=True)
+    name = models.CharField(max_length=200, unique=False)
     description = models.TextField(_("Description"), null=True, blank=True)
     theme_color_hash = models.CharField(_("Theme Color"), max_length=7, null=True, blank=True, unique=True)
 
