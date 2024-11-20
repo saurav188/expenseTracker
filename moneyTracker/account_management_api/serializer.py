@@ -43,19 +43,10 @@ class AccountSerializer(serializers.ModelSerializer):
             user_id=user,
             name=validated_data['name'],
             account_type=validated_data['account_type'],
-            theme_color_hash=validated_data['theme_color_hash'],
         )
         
         if 'description' in validated_data.keys():
             account.description = validated_data['description']
-        if 'show_card' in validated_data.keys():
-            account.show_card = validated_data['show_card']
-        if 'show_pie' in validated_data.keys():
-            account.show_pie = validated_data['show_pie']
-        if 'show_line' in validated_data.keys():
-            account.show_line = validated_data['show_line']
-        if 'theme_icon_fa_class' in validated_data.keys():
-            account.theme_icon_fa_class = validated_data['theme_icon_fa_class']
             
         return account
 

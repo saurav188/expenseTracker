@@ -17,6 +17,7 @@ from django.core.paginator import Paginator
 import datetime
 import pytz
 from .utils import get_time_series, get_category
+from django.db.models import Sum , Count         
 
 utc=pytz.UTC
 
@@ -89,6 +90,28 @@ class AccountAPI(APIView):
             return Response({"status":True,"message":"account successfully deleted"},status=status.HTTP_200_OK)
         except:
             return Response({"status":False,"message":"requested data doesnot exist"}, status=status.HTTP_400_BAD_REQUEST)
+          
+
+
+class CategoryDonut(APIView):
+    authentication_classes = [TokenAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, format= None):
+        categories = { i.id:i.name for i in Category.objects.filter(user_id = request.user)}
+        trns = Transaction.objects.filter(user_id = request.user).values('category_id').annotate(total_amount=Sum('amount'))
+        for obj in trns:
+            obj['category_name'] = categories[obj['category_id']]
+            
+        return Response({
+                "status":True,
+                "message":"data retrieved",
+                "data":trns
+            },
+            status = status.HTTP_200_OK
+        )
+                 
+          
             
 # account detail : api/acc/category/
 class CategoryAPI(APIView):
