@@ -1,2 +1,0 @@
-# expenseTracker
-Expense Tracking app
