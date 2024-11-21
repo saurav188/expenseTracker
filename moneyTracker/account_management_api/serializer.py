@@ -4,33 +4,32 @@ from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
 from .models import Account, Category, Transaction
 from auth_api.models import User
+import datetime
 
 class AccountSerializer(serializers.ModelSerializer):
+    balance = serializers.ReadOnlyField()
 
     class Meta:
         model = Account
-        fields = (
+        fields = [
             'id',
             'name',
             'description',
             'balance',
             'account_type',
-            'show_card',
-            'show_pie',
-            'show_line',
-            'theme_color_hash',
-            'theme_icon_fa_class',
-        )
+            # 'show_card',
+            # 'show_pie',
+            # 'show_line',
+            # 'theme_color_hash',
+            # 'theme_icon_fa_class',
+        ]
         extra_kwargs = {
             'name': {'required': True},
             'account_type': {'required': True},
-            'theme_color_hash': {'required': True},
+            'theme_color_hash': {'required': False},
         }
         
     def validate(self, attrs):
-        if 'balance' in attrs.keys() and attrs['balance'] < 0:
-            raise serializers.ValidationError({"balance": "Balance cannot be less than zero"})
-
         return attrs
 
     def create(self, validated_data):
@@ -44,21 +43,10 @@ class AccountSerializer(serializers.ModelSerializer):
             user_id=user,
             name=validated_data['name'],
             account_type=validated_data['account_type'],
-            theme_color_hash=validated_data['theme_color_hash'],
         )
         
         if 'description' in validated_data.keys():
             account.description = validated_data['description']
-        if 'balance' in validated_data.keys():
-            account.balance = validated_data['balance']
-        if 'show_card' in validated_data.keys():
-            account.show_card = validated_data['show_card']
-        if 'show_pie' in validated_data.keys():
-            account.show_pie = validated_data['show_pie']
-        if 'show_line' in validated_data.keys():
-            account.show_line = validated_data['show_line']
-        if 'theme_icon_fa_class' in validated_data.keys():
-            account.theme_icon_fa_class = validated_data['theme_icon_fa_class']
             
         return account
 
@@ -126,6 +114,7 @@ class TransactionSerializer(serializers.ModelSerializer):
             'account_id': {'required': True},
             'category_id': {'required': True},
             'amount': {'required': True},
+            'trn_date': {'required': False},
         }
 
     def get_account_name(self, obj):
@@ -147,6 +136,8 @@ class TransactionSerializer(serializers.ModelSerializer):
             user = User.objects.get(id = validated_data["user_id"])
         elif request and hasattr(request, "user"):
             user = request.user
+        if 'trn_date' not in validated_data.keys():
+            validated_data['trn_date'] = datetime.datetime.now()
         transaction = Transaction.objects.create(
             user_id=user,
             account_id=validated_data['account_id'],

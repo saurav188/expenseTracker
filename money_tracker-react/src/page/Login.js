@@ -6,9 +6,12 @@ import MoneyTrackerLogo1 from "../assets/Logo/MoneyTrackerLogo1.png";
 
 // Declare the color outside to reuse it
 export const iconColor = "rgb(114,196,144)";
+import MoneyTrackerLogo1 from "../assets/Logo/MoneyTrackerLogo1.png";
+
+
 
 function Login() {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
@@ -22,10 +25,34 @@ function Login() {
     e.preventDefault();
     setLoginError("Attempting to log in...");
 
+  const LoginFunction = async (e) => {
+    e.preventDefault();
+    setLoginError("Attempting to log in...");
+
     let data = {
-      username: username,
+      email: email,
       password: password,
     };
+
+    try {
+      const response = await axios.post("http://localhost:8000/api/auth/user/login/", data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.data.status) {
+        setToken(response.data.token);
+        setLoggedIn(true);
+        navigate("/dashboard");
+      } else {
+        sessionStorage.removeItem("moneyTrackertoken");
+        setLoginError("Login failed. Please check your credentials.");
+      }
+    } catch (error) {
+      console.log("Error: " + error.message);
+      setLoginError("An error occurred. Please try again.");
+    }
 
     try {
       const response = await axios.post("http://localhost:8000/api/auth/user/login/", data, {
@@ -116,6 +143,7 @@ function Login() {
       </div>
     </div>
   );
+}
 }
 
 export default Login;
