@@ -132,27 +132,13 @@ const CreateTransaction = () => {
           <label htmlFor="categoryId" className="block text-gray-700 font-medium mb-2">
             Category
           </label>
-          <select
-            id="categoryId"
-            name="categoryId"
-            value={categoryId}
-            onChange={(e) => setCategoryId(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            required
-          >
-            {/* Conditionally render the categoryId as the first option */}
-            {categoryId && <option value={categoryId}>{categoryId}</option>}
-
-            {/* Default option */}
-            <option value="">Select Category</option>
-
-            {/* Render the categories */}
-            {categories.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.name}
+          <option value="">Select Category</option>
+            {categoryId.map((category) => (
+              <option key={category.categoryId} value={category.categoryId}>
+                {category.category_name}
               </option>
             ))}
-          </select>
+      
         </div>
 
         <div className="mb-4">
@@ -227,7 +213,7 @@ const CreateTransaction = () => {
                 type="submit"
                 form="transactionForm"
                 className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                disabled={!isFormValid()} // Disable if form is not valid
+                disabled={!isFormValid()} 
               >
                 Submit
               </button>
@@ -240,3 +226,26 @@ const CreateTransaction = () => {
 };
 
 export default CreateTransaction;
+
+
+    // <select
+    //         id="categoryId"
+    //         name="categoryId"
+    //         value={categoryId}
+    //         onChange={(e) => setCategoryId(e.target.value)}
+    //         className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+    //         required
+    //       >
+    //         {/* Conditionally render the categoryId as the first option */}
+    //         {categoryId && <option value={categoryId}>{categoryId}</option>}
+
+    //         {/* Default option */}
+    //         <option value="">Select Category</option>
+
+    //         {/* Render the categories */}
+    //         {categories.map((category) => (
+    //           <option key={category.id} value={category.id}>
+    //             {category.name}
+    //           </option>
+    //         ))}
+    //       </select>
