@@ -42,6 +42,7 @@ class AccountSerializer(serializers.ModelSerializer):
         account = Account.objects.create(
             user_id=user,
             name=validated_data['name'],
+            description = validated_data['description'],
             account_type=validated_data['account_type'],
         )
         
