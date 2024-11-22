@@ -60,12 +60,12 @@ class CategorySerializer(serializers.ModelSerializer):
             'name',
             'description',
             'category_type',
-            'theme_color_hash',
+            # 'theme_color_hash',
         )
         extra_kwargs = {
             'name': {'required': True},
             'category_type': {'required': True},
-            'theme_color_hash': {'required': True},
+            'theme_color_hash': {'required': False},
         }
         
     def validate(self, attrs):
@@ -85,7 +85,6 @@ class CategorySerializer(serializers.ModelSerializer):
             user_id=user,
             name=validated_data['name'],
             category_type=validated_data['category_type'],
-            theme_color_hash=validated_data['theme_color_hash'],
         )
         
         if 'description' in validated_data.keys():
