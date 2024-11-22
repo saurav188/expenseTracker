@@ -25,6 +25,10 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+            <Route exact path="/dashboard" element={<Dashboard />} />
+            <Route exact path="/account" element={<Account />} />
+            <Route exact path="/category" element={<Category />} />
+            <Route exact path="/transaction" element={<Transaction />} />
         {/* Public routes */}
         <Route exact path="/" element={<Login />} />
         <Route exact path="/login" element={<Login />} />
@@ -37,30 +41,8 @@ function App() {
           element={<PasswordResetConfirm />}
         />
         <Route exact path="/error" element={<Error />} />
-
-        {/* Private routes */}
-        {token && (
-          <Route element={<PrivateRoute />}>
-            <Route exact path="/dashboard" element={<Dashboard />} />
-            <Route exact path="/account" element={<Account />} />
-            <Route exact path="/category" element={<Category />} />
-            <Route exact path="/transaction" element={<Transaction />} />
-          </Route>
-        )}
       </Routes>
     </BrowserRouter>
   );
 }
-
-const PrivateRoute = ({ children }) => {
-  // const token = sessionStorage.getItem("token");
-  const token="abc"
-
-  if (!token) {
-    return <Login />;
-  }
-
-  return children;
-};
-
 export default App;
