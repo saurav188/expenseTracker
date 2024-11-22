@@ -65,7 +65,7 @@ const CreateTransaction = () => {
           Authorization: `Token ${token}`,
         },
       });
-      setAccounts(accountResponse.data.data); 
+      setAccounts(accountResponse.data.data);
 
       const categoryResponse = await axios.get(`http://localhost:8000/api/acc/category`, {
         headers: {
@@ -73,30 +73,36 @@ const CreateTransaction = () => {
           Authorization: `Token ${token}`,
         },
       });
-      setCategories(categoryResponse.data.data); 
+      setCategories(categoryResponse.data.data);
     } catch (error) {
       console.log("Error fetching account or category details:", error);
     }
   };
 
-  const handleNotesChange=async(note)=>{
-      try{
-        const noteResponse=await axios.get(`http://localhost:8000/api/acc/expense-classification/`,{
-          headers:{
-         "Content-Type": "application/json",
+  // Set Category when Change is made in notes
+  const handleNotesChange = async (note) => {
+    try {
+      const noteResponse = await axios.post(`http://localhost:8000/api/acc/expense-classification/`, { remarks: note }, {
+        headers: {
+          "Content-Type": "application/json",
           Authorization: `Token ${token}`,
-          }
-          }
-        )
-        console.log(noteResponse.data)
-      }catch(error){
-        console.log(error);
-      }
-  }
+        },
+      });
+      setCategoryId(noteResponse.data.data);
+      console.log(noteResponse.data.data);
+    } catch (error) {
+      console.log("Error fetching note classifications:", error);
+    }
+  };
 
   useEffect(() => {
     getAccountAndCategoryDetails();
   }, []);
+
+  // Disable submit button if any field is empty
+  const isFormValid = () => {
+    return accountId && categoryId && amount && note; // Check if all required fields are filled
+  };
 
   function TransactionForm() {
     return (
@@ -134,7 +140,13 @@ const CreateTransaction = () => {
             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
             required
           >
+            {/* Conditionally render the categoryId as the first option */}
+            {categoryId && <option value={categoryId}>{categoryId}</option>}
+
+            {/* Default option */}
             <option value="">Select Category</option>
+
+            {/* Render the categories */}
             {categories.map((category) => (
               <option key={category.id} value={category.id}>
                 {category.name}
@@ -171,9 +183,10 @@ const CreateTransaction = () => {
             value={note}
             onChange={(e) => {
               setNote(e.target.value);
-              handleNotesChange(note);
+              handleNotesChange(e.target.value); // Call the notes handler on change
             }}
             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            required
           />
         </div>
       </form>
@@ -214,6 +227,7 @@ const CreateTransaction = () => {
                 type="submit"
                 form="transactionForm"
                 className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                disabled={!isFormValid()} // Disable if form is not valid
               >
                 Submit
               </button>

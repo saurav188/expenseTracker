@@ -178,7 +178,7 @@ class ExpenseClassification(APIView):
     authentication_classes = [TokenAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, format= None):
+    def post(self, request, format= None):
         remarks = request.data['remarks']
         
         return Response({
