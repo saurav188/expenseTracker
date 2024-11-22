@@ -17,8 +17,10 @@ class Account(models.Model):
     SAVINGS = "SVG"
     CHECKING = "CHK"
     INVESTMENT = "INV"
+    WALLET = "WAL"
     ACCOUNT_TYPE_CHOICE = {
         (SAVINGS, "Savings"),
+        (WALLET, "Mobile Wallet"),
         (CHECKING, "Checking"),
         (INVESTMENT, "Investment"),
     }
