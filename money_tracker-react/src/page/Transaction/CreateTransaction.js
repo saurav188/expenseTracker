@@ -108,21 +108,36 @@ const CreateTransaction = () => {
   };
 
   // Handle account search
-  const handleAccountSearch = (searchValue) => {
-    const filtered = accounts.filter((account) =>
-      account.name.toLowerCase().includes(searchValue.toLowerCase())
-    );
-    setFilteredAccounts(filtered);
-  };
+  const handleAccountSearch = async (name) => {
+  try {
+    const accountResponse = await axios.get(`http://localhost:8000/api/acc/account`, {
+      headers: {
+        Authorization: `Token ${token}`,
+      },
+      params: { name }
+    });
 
-  // Handle category search
-  const handleCategorySearch = (searchValue) => {
-    setCategorySearchTerm(searchValue);
-    const filtered = categories.filter((category) =>
-      category.name.toLowerCase().includes(searchValue.toLowerCase())
-    );
-    setFilteredCategories(filtered);
-  };
+    // Update filtered accounts with the API response data
+    setFilteredAccounts(accountResponse.data.data);
+  } catch (error) {
+    console.error("Error fetching account data", error);
+  }
+};
+// Handle category search
+const handleCategorySearch = async (name) => {
+  try {
+    const response = await axios.get('http://localhost:8000/api/acc/category', {
+      headers: {
+        Authorization: `Token ${token}`,
+      },
+      params: { name },
+    });
+    setFilteredCategories(response.data.data);
+    console.log(response.data.data, "hello");
+  } catch (error) {
+    console.error("Error fetching categories", error);
+  }
+};
 
   // Handle note change and filter category
   const handleNotesChange = async (noteValue) => {
@@ -147,79 +162,83 @@ const CreateTransaction = () => {
   const TransactionForm = () => (
     <form id="transactionForm" onSubmit={handleSubmit}>
       <div className="mb-4">
-        <label htmlFor="accountId" className="block text-gray-700 font-medium mb-2">
-          Bank Account
-        </label>
-        <div className="relative">
-          <input
-            type="text"
-            id="accountId"
-            value={searchTerm}
-            onChange={(e) => {
-              handleAccountSearch(e.target.value);
-              setSearchTerm(e.target.value);
-            }}
-            placeholder="Search Account"
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          />
-          {errors.accountId && <p className="text-red-500 text-sm">{errors.accountId}</p>}
-          {filteredAccounts.length > 0 && (
-            <ul className="border border-gray-300 rounded-md max-h-40 overflow-y-auto bg-white absolute z-10 w-full">
-              {filteredAccounts.map((account) => (
-                <li
-                  key={account.id}
-                  className="px-4 py-2 hover:bg-indigo-100 cursor-pointer"
-                  onClick={() => {
-                    setSearchTerm(account.name);
-                    setAccountId(account.id);
-                    setFilteredAccounts([]);
-                  }}
-                >
-                  {account.name}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      </div>
+  <label htmlFor="accountId" className="block text-gray-700 font-medium mb-2">
+    Bank Account
+  </label>
+  <div className="relative">
+    <input
+      type="text"
+      id="accountId"
+      value={searchTerm}  
+      onChange={(e) => {
+        const inputValue = e.target.value;
+        setSearchTerm(inputValue); 
+        handleAccountSearch(inputValue); 
+      }}
+      placeholder="Search Account"
+      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+    />
+    {errors.accountId && <p className="text-red-500 text-sm">{errors.accountId}</p>}
 
-      <div className="mb-4">
-        <label htmlFor="categoryId" className="block text-gray-700 font-medium mb-2">
-          Category
-        </label>
-        <div className="relative">
-          <input
-            type="text"
-            id="categoryId"
-            value={categoryName || categorySearchTerm  }
-            onChange={(e) => {
-              setCategoryName(e.target.value)
-              handleCategorySearch(e.target.value);
-              setCategorySearchTerm(e.target.value);
+    {filteredAccounts.length > 0 && (
+      <ul className="border border-gray-300 rounded-md max-h-40 overflow-y-auto bg-white absolute z-10 w-full">
+        {filteredAccounts.map((account) => (
+          <li
+            key={account.id}
+            className="px-4 py-2 hover:bg-indigo-100 cursor-pointer"
+            onClick={() => {
+              setSearchTerm(account.name); 
+              setAccountId(account.id);  
+              setFilteredAccounts([]);  
             }}
-            placeholder="Search Category"
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          />
-          {errors.categoryId && <p className="text-red-500 text-sm">{errors.categoryId}</p>}
-          {filteredCategories.length > 0 && (
-            <ul className="border border-gray-300 rounded-md max-h-40 overflow-y-auto bg-white absolute z-10 w-full">
-              {filteredCategories.map((category) => (
-                <li
-                  key={category.id}
-                  className="px-4 py-2 hover:bg-indigo-100 cursor-pointer"
-                  onClick={() => {
-                    setCategorySearchTerm(category.name);
-                    setCategoryId(category.id);
-                    setFilteredCategories([]);
-                  }}
-                >
-                  {category.name}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      </div>
+          >
+            {account.name}
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+</div>
+
+     <div className="mb-4">
+  <label htmlFor="categoryId" className="block text-gray-700 font-medium mb-2">
+    Category
+  </label>
+  <div className="relative">
+    <input
+      type="text"
+      id="categoryId"
+      value={categorySearchTerm}  // Set to categorySearchTerm directly
+      onChange={(e) => {
+        const searchValue = e.target.value;
+        setCategoryName(searchValue);  // Set category name for controlled input
+        setCategorySearchTerm(searchValue);  // Update search term
+        handleCategorySearch(searchValue);  // Fetch filtered categories
+      }}
+      placeholder="Search Category"
+      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+    />
+    {errors.categoryId && <p className="text-red-500 text-sm">{errors.categoryId}</p>}
+
+    {filteredCategories.length > 0 && (
+      <ul className="border border-gray-300 rounded-md max-h-40 overflow-y-auto bg-white absolute z-10 w-full">
+        {filteredCategories.map((category) => (
+          <li
+            key={category.id}
+            className="px-4 py-2 hover:bg-indigo-100 cursor-pointer"
+            onClick={() => {
+              setCategorySearchTerm(category.name);  // Set selected category name in input
+              setCategoryId(category.id);  // Set selected category ID
+              setFilteredCategories([]);  // Clear the dropdown list after selection
+            }}
+          >
+            {category.name}
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+</div>
 
       <div className="mb-4">
         <label htmlFor="amount" className="block text-gray-700 font-medium mb-2">
