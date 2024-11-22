@@ -5,7 +5,7 @@ from django.db.models import Sum, F, Case, When
 
 class Account(models.Model):
     user_id = models.ForeignKey("auth.User", verbose_name=_("Owner"), on_delete=models.CASCADE)
-    name = models.CharField(max_length=200, unique=True)
+    name = models.CharField(max_length=200, unique=False)
     description = models.TextField(_("Description"), null=True, blank=True)
     # balance = models.FloatField(_("Balance"), default=0)
     show_card = models.BooleanField(_("Show Card"), default=False)
@@ -17,8 +17,10 @@ class Account(models.Model):
     SAVINGS = "SVG"
     CHECKING = "CHK"
     INVESTMENT = "INV"
+    WALLET = "WAL"
     ACCOUNT_TYPE_CHOICE = {
         (SAVINGS, "Savings"),
+        (WALLET, "Mobile Wallet"),
         (CHECKING, "Checking"),
         (INVESTMENT, "Investment"),
     }
