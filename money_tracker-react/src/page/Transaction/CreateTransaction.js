@@ -97,8 +97,12 @@ const CreateTransaction = () => {
       setAccountId("");
       setCategoryId("");
       setCategoryName("");
+      setCategoryName("");
       setAmount("");
       setNote("");
+      setSearchTerm("");
+      setCategorySearchTerm("");
+      setErrors({});
       setSearchTerm("");
       setCategorySearchTerm("");
       setErrors({});

@@ -47,6 +47,7 @@ const Transaction = () => {
     }
   };
 
+
   useEffect(() => {
     getTransactionData();
   }, [Page]); 
