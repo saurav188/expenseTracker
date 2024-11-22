@@ -1,5 +1,4 @@
 import { React, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import NavbarHeader from "../components/NavbarHeader";
 import Table from "react-bootstrap/Table";
 import getToken from "../hooks/GetToken";
@@ -18,17 +17,14 @@ import { MdClose } from "react-icons/md";
 import Modal from "react-bootstrap/Modal";
 import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
+import axios from "axios";
 
 function Account() {
+  let token = getToken();
   const [Error, setError] = useState({
     name: "",
     description: "",
     balance: "",
-    show_card: "",
-    show_pie: "",
-    show_line: "",
-    theme_color_hash: "",
-    theme_icon_fa_class: "",
     account_type: "",
   });
 
@@ -37,24 +33,13 @@ function Account() {
   const [FormName, setFormName] = useState("");
   const [FormDescription, setFormDescription] = useState("");
   const [FormBalance, setFormBalance] = useState(0);
-  const [FormShowCard, setFormShowCard] = useState(0);
-  const [FormShowPie, setFormShowPie] = useState(0);
-  const [FormShowLine, setFormShowLine] = useState(0);
-  const [FormThemeColor, setFormThemeColor] = useState("");
-  const [FormThemeIcon, setFormThemeIcon] = useState("");
-  const [FormAccountType, setFormAccountType] = useState("CHK");
-
-  const navigate = useNavigate();
-  let token = getToken();
+  const [FormAccountType, setFormAccountType] = useState("SVG");
   const [Accounts, setAccounts] = useState([]);
   const [Page, setPage] = useState(1);
   const [FormOpen, setFormOpen] = useState(false);
   const [ModalTitle, setModalTitle] = useState("New Account");
   const [MaxPage, setMaxPage] = useState(1);
   const [Name, setName] = useState("");
-  const [ShowCard, setShowCard] = useState(0);
-  const [ShowPie, setShowPie] = useState(0);
-  const [ShowLine, setShowLine] = useState(0);
   const [url, setUrl] = useState(
     `http://localhost:8000/api/acc/account/?page=${Page}`
   );
@@ -65,118 +50,66 @@ function Account() {
     Checking: "CHK",
     Investment: "INV",
   };
+const saveClick = async () => {
+  try {
+    setFormOpen(true);
+    const header = {
+      "Content-Type": "application/json",
+      Authorization: `Token ${token}`,
+    };
 
-  let saveClick = () => {
+    const data = {
+      id: FormId,
+      name: FormName,
+      description: FormDescription,
+      balance: FormBalance,
+      account_type: FormAccountType,
+    };
+
+    let temp = `http://localhost:8000/api/acc/account/`;
+
+    let response;
+
     if (FormId === 0) {
-      setFormOpen(true);
-      let temp = `http://localhost:8000/api/acc/account/`;
-      let header = {
-        "Content-Type": "application/json",
-        Authorization: `Token ${token}`,
-      };
-
-      let data = {
-        name: FormName,
-        description: FormDescription,
-        balance: FormBalance,
-        show_card: FormShowCard,
-        show_pie: FormShowPie,
-        show_line: FormShowLine,
-        theme_color_hash: FormThemeColor,
-        theme_icon_fa_class: FormThemeIcon,
-        account_type: FormAccountType,
-      };
-
-      fetch(temp, {
-        method: "POST",
-        headers: header,
-        body: JSON.stringify(data),
-      })
-        .then((reponse) => reponse.json())
-        .then((data) => {
-          if (data["status"]) {
-            getData();
-            setFormOpen(false);
-            resetModalForm();
-          } else {
-            let temp = Error;
-            for (var key in temp) {
-              if (key in data["message"])
-                temp[key] = (
-                  <p className="text-danger"> {data["message"][key][0]}</p>
-                );
-              else temp[key] = "";
-            }
-            setError((prevState) => {
-              return temp;
-            });
-            console.log(Error);
-          }
-        })
-        .catch((error) => console.log("Error: " + error.message));
+      // Send POST request using axios
+      response = await axios.post(temp, data, { headers: header });
     } else {
-      setFormOpen(true);
-      let temp = `http://localhost:8000/api/acc/account/`;
-      let header = {
-        "Content-Type": "application/json",
-        Authorization: `Token ${token}`,
-      };
-
-      let data = {
-        id: FormId,
-        name: FormName,
-        description: FormDescription,
-        balance: FormBalance,
-        show_card: FormShowCard,
-        show_pie: FormShowPie,
-        show_line: FormShowLine,
-        theme_color_hash: FormThemeColor,
-        theme_icon_fa_class: FormThemeIcon,
-        account_type: FormAccountType,
-      };
-
-      fetch(temp, {
-        method: "PATCH",
-        headers: header,
-        body: JSON.stringify(data),
-      })
-        .then((reponse) => reponse.json())
-        .then((data) => {
-          if (data["status"]) {
-            getData();
-            setFormOpen(false);
-            resetModalForm();
-          } else {
-            let temp = Error;
-            for (var key in temp) {
-              if (key in data["message"])
-                temp[key] = (
-                  <p className="text-danger"> {data["message"][key][0]}</p>
-                );
-              else temp[key] = "";
-            }
-            setError((prevState) => {
-              return temp;
-            });
-            console.log(Error);
-          }
-        })
-        .catch((error) => console.log("Error: " + error.message));
+      // Send PATCH request using axios
+      response = await axios.patch(temp, data, { headers: header });
     }
-  };
+
+    if (response.data.status) {
+      getData();
+      setFormOpen(false);
+      resetModalForm();
+    } else {
+      handleError(response.data.message);
+    }
+  } catch (error) {
+    console.log("Error: " + error.message);
+  }
+};
+
+const handleError = (message) => {
+  let temp = Error;
+  for (let key in temp) {
+    if (key in message) {
+      temp[key] = <p className="text-danger">{message[key][0]}</p>;
+    } else {
+      temp[key] = "";
+    }
+  }
+  setError((prevState) => {
+    return temp;
+  });
+  console.log(Error);
+};
 
   let gettFilterUrl = (ev) => {
     ev.preventDefault();
     setUrl(
-      `http://localhost:8000/api/acc/account/?page=${Page}&name=${Name}&show_card=${ShowCard}&show_pie=${ShowPie}&show_line=${ShowLine}`
+      `http://localhost:8000/api/acc/account/?page=${Page}&name=${Name}`
     );
-  };
-
-  let resetFilter = (ev) => {
-    setName("");
-    setShowCard(0);
-    setShowPie(0);
-    setShowLine(0);
   };
 
   let prevPage = () => {
@@ -200,8 +133,7 @@ function Account() {
     fetch(url, {
       method: "GET",
       headers: header,
-      // mode: "no-cors",
-      // body: JSON.stringify(data),
+   
     })
       .then((reponse) => reponse.json())
       .then((data) => {
@@ -238,11 +170,6 @@ function Account() {
         setFormName(data["data"]["name"]);
         setFormDescription(data["data"]["description"]);
         setFormBalance(data["data"]["balance"]);
-        setFormShowCard(data["data"]["show_card"]);
-        setFormShowPie(data["data"]["show_pie"]);
-        setFormShowLine(data["data"]["show_line"]);
-        setFormThemeColor(data["data"]["theme_color_hash"]);
-        setFormThemeIcon(data["data"]["theme_icon_fa_class"]);
         setFormAccountType(data["data"]["account_type"]);
       })
       .catch((error) => console.log("Error: " + error.message));
@@ -253,22 +180,12 @@ function Account() {
     setFormName("");
     setFormDescription("");
     setFormBalance(0);
-    setFormShowCard(0);
-    setFormShowPie(0);
-    setFormShowLine(0);
-    setFormThemeColor("");
-    setFormThemeIcon("");
     setFormAccountType("CHK");
     setError((prevState) => {
       return {
         name: "",
         description: "",
         balance: "",
-        show_card: "",
-        show_pie: "",
-        show_line: "",
-        theme_color_hash: "",
-        theme_icon_fa_class: "",
         account_type: "",
       };
     });
@@ -314,12 +231,11 @@ function Account() {
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Balance</Form.Label>
+              Rs.
               <Form.Control
-                disabled
-                className="disabled"
                 value={FormBalance}
+                onChange={(ev) => setFormBalance(ev.target.value)}
                 type="number"
-                placeholder="0.00"
               />
               {Error["balance"]}
             </Form.Group>
@@ -335,33 +251,7 @@ function Account() {
               />
               {Error["description"]}
             </Form.Group>
-            <Row>
-              <Col>
-                <Form.Check
-                  label="Show Card"
-                  value={FormShowCard ? true : false}
-                  onChange={(ev) => setFormShowCard(ev.target.checked ? 1 : 0)}
-                  type="switch"
-                />
-              </Col>
-              <Col>
-                <Form.Check
-                  label="Show Pie"
-                  value={FormShowPie ? true : false}
-                  onChange={(ev) => setFormShowPie(ev.target.checked ? 1 : 0)}
-                  type="switch"
-                />
-              </Col>
-              <Col>
-                <Form.Check
-                  label="Show In Line"
-                  value={FormShowLine ? true : false}
-                  onChange={(ev) => setFormShowLine(ev.target.checked ? 1 : 0)}
-                  type="switch"
-                  id="custom-switch"
-                />
-              </Col>
-            </Row>
+           
           </Form>
         </Modal.Body>
 
@@ -427,7 +317,7 @@ function Account() {
   useEffect(() => {
     if (filterClicked)
       setUrl(
-        `http://localhost:8000/api/acc/account/?page=${Page}&name=${Name}&show_card=${ShowCard}&show_pie=${ShowPie}&show_line=${ShowLine}`
+        `http://localhost:8000/api/acc/account/?page=${Page}&name=${Name}`
       );
     else setUrl(`http://localhost:8000/api/acc/account/?page=${Page}`);
 
@@ -481,7 +371,6 @@ function Account() {
                   }}
                   onReset={(ev) => {
                     setFilterClicked(false);
-                    resetFilter(ev);
                     setUrl(
                       `http://localhost:8000/api/acc/account/?page=${Page}`
                     );
@@ -496,42 +385,7 @@ function Account() {
                         placeholder="Enter name to search"
                       />
                     </Col>
-                    <Row>
-                      <Col>
-                        <Form.Label>
-                          Show
-                          <br /> Card
-                        </Form.Label>
-                        <Form.Control
-                          className="btn"
-                          value={ShowCard}
-                          onChange={(ev) => {
-                            setShowCard(ev.target.checked ? 1 : 0);
-                          }}
-                          type="checkbox"
-                        />
-                      </Col>
-                      <Col>
-                        <Form.Label>Show Pie</Form.Label>
-                        <Form.Control
-                          value={ShowPie}
-                          onChange={(ev) => {
-                            setShowPie(ev.target.checked ? 1 : 0);
-                          }}
-                          type="checkbox"
-                        />
-                      </Col>
-                      <Col>
-                        <Form.Label>Show Line</Form.Label>
-                        <Form.Control
-                          value={ShowLine}
-                          onChange={(ev) => {
-                            setShowLine(ev.target.checked ? 1 : 0);
-                          }}
-                          type="checkbox"
-                        />
-                      </Col>
-                    </Row>
+                   
                   </Row>
                   <Button type="submit" variant="primary">
                     Filter

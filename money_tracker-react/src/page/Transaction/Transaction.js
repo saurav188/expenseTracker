@@ -11,8 +11,19 @@ import { confirmAlert } from "react-confirm-alert";
 const Transaction = () => {
   const token = getToken(); // Assumed that getToken() provides the token
   const [transactionData, setTransactionData] = useState([]);
-  const [accountId, setAccountId] = useState();
+  const [Page, setPage] = useState(1);
+  const [MaxPage, setMaxPage] = useState(1);
   const [error, setError] = useState(null);
+
+
+   let prevPage = () => {
+    if (Page > 1) setPage(Page - 1);
+  };
+
+  let nextPage = () => {
+    if (Page <= MaxPage) setPage(Page + 1);
+  };
+
 
   const getTransactionData = async () => {
     let header = {
@@ -22,7 +33,7 @@ const Transaction = () => {
 
     try {
       const response = await axios.get(
-       `http://localhost:8000/api/acc/transaction/`,
+        `http://localhost:8000/api/acc/transaction/?page=${Page}`,
         {
           headers: header,
           params: {
@@ -31,23 +42,28 @@ const Transaction = () => {
           },
         }
       );
-      setTransactionData(response.data);
+      console.log(response,"consolePage")
+      // setMaxPage(response["num_pages"]);
+      if (response.data && response.data.length > 0) {
+        setTransactionData(response.data); 
+      } else {
+        setTransactionData([]); 
+      }
     } catch (err) {
       setError("Error fetching transaction data");
       console.error(err);
     }
   };
+
   useEffect(() => {
     getTransactionData();
-  }, []);
+  }, [Page]); 
 
- 
-
-  // delete
+  // Delete
   let DeleteRecord = (id) => {
     confirmAlert({
       title: "Confirmation",
-      message: "Are you sure to want to delete this Transaction.",
+      message: "Are you sure you want to delete this Transaction?",
 
       buttons: [
         {
@@ -63,9 +79,7 @@ const Transaction = () => {
               method: "DELETE",
               headers: header,
             })
-              .then((reponse) => {
-                return reponse.json();
-              })
+              .then((response) => response.json())
               .then((data) => {
                 if (data["status"]) {
                   getTransactionData();
@@ -83,6 +97,7 @@ const Transaction = () => {
       ],
     });
   };
+
   return (
     <div>
       <NavBar />
@@ -99,7 +114,7 @@ const Transaction = () => {
               <th>Category</th>
               <th>Amount</th>
               <th>Note</th>
-              {/* <th>Action</th> */}
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -120,19 +135,21 @@ const Transaction = () => {
           </tbody>
         </Table>
         <div className="pagination-btns">
-          <div
-            className="btn btn-secondary btn-sm pagination-btn"
-            // onClick={prevPage}
-          >
-            <FaArrowLeft />
-          </div>
-          <div className="curr-page">{/* {Page} */}1</div>
-          <div
-            className="btn btn-secondary btn-sm pagination-btn"
-            // onClick={nextPage}
-          >
-            <FaArrowRight />
-          </div>
+            <div
+                className="btn btn-secondary btn-sm pagination-btn"
+                onClick={prevPage}
+              >
+                <FaArrowLeft />
+              </div>
+              <div className="curr-page">{Page}</div>
+              <div
+                className="btn btn-secondary btn-sm pagination-btn"
+                onClick={()=>{
+                  console.log(Page)
+                  nextPage()}}
+              >
+                <FaArrowRight />
+              </div>
         </div>
       </div>
     </div>
