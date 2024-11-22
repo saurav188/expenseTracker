@@ -22,7 +22,7 @@ const Transaction = () => {
 
     try {
       const response = await axios.get(
-        "http://localhost:8000/api/acc/transaction/",
+       `http://localhost:8000/api/acc/transaction/`,
         {
           headers: header,
           params: {
@@ -41,7 +41,8 @@ const Transaction = () => {
     getTransactionData();
   }, []);
 
-  // debugger;
+ 
+
   // delete
   let DeleteRecord = (id) => {
     confirmAlert({
@@ -105,9 +106,11 @@ const Transaction = () => {
             {transactionData.map((transaction, index) => (
               <tr key={transaction.id}>
                 <td>{index + 1}</td>
-                <td>{transaction.account_id}</td>
-                <td>{transaction.category_id}</td>
-                <td>{transaction.amount}</td>
+                <td>{transaction.account_name}</td>
+                <td>{transaction.category_name}</td>
+                <td>Rs. {transaction.amount}</td>
+                {/* <td>{transaction.trn_date}</td> */}
+
                 <td>{transaction.note || "No Note"}</td>
                 <td onClick={(ev) => DeleteRecord(transaction.id)} width="5px">
                   <FaRegTrashAlt />
