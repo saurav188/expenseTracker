@@ -79,6 +79,21 @@ const CreateTransaction = () => {
     }
   };
 
+  const handleNotesChange=async(note)=>{
+      try{
+        const noteResponse=await axios.get(`http://localhost:8000/api/acc/expense-classification/`,{
+          headers:{
+         "Content-Type": "application/json",
+          Authorization: `Token ${token}`,
+          }
+          }
+        )
+        console.log(noteResponse.data)
+      }catch(error){
+        console.log(error);
+      }
+  }
+
   useEffect(() => {
     getAccountAndCategoryDetails();
   }, []);
@@ -154,7 +169,10 @@ const CreateTransaction = () => {
             name="note"
             placeholder="Note..."
             value={note}
-            onChange={(e) => setNote(e.target.value)}
+            onChange={(e) => {
+              setNote(e.target.value);
+              handleNotesChange(note);
+            }}
             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
         </div>
