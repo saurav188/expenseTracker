@@ -264,6 +264,7 @@ class TransactionAPI(APIView):
             except:
                 return Response({"status":False,"message":"requested data doesnot exist"}, status=status.HTTP_400_BAD_REQUEST)
             serializer = TransactionSerializer(obj, many=False)
+            return Response({"status":True,"message":"transactions retrieved","data":serializer.data},status = status.HTTP_200_OK)
         else:
             try:
                 objs = Transaction.objects.filter(user_id = request.user)
@@ -278,11 +279,11 @@ class TransactionAPI(APIView):
                 page_size = 2
                 paginator = Paginator(objs, page_size)
                 serializer = TransactionSerializer(paginator.page(page), many=True)
+                return Response({"status":True,"message":"transactions retrieved","num_pages":paginator.num_pages,"data":serializer.data},status = status.HTTP_200_OK)
             except:
                 return Response({"status":False,"message":"invalid page number"}, status=status.HTTP_400_BAD_REQUEST)
                 
             
-        return Response(serializer.data)
 
     def patch(self, request, format=None):
         try:
