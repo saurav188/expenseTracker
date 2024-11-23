@@ -283,7 +283,7 @@ class TransactionAPI(APIView):
             return Response({"status":True,"message":"transactions retrieved","data":serializer.data},status = status.HTTP_200_OK)
         else:
             try:
-                objs = Transaction.objects.filter(user_id = request.user)
+                objs = Transaction.objects.filter(user_id = request.user).order_by('-trn_date')
                 if 'account_id' in request.data.keys():
                     objs = objs.filter(account_id=request.data['account_id'])
                 if 'category_id' in request.data.keys():

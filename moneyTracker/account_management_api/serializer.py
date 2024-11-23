@@ -84,11 +84,10 @@ class CategorySerializer(serializers.ModelSerializer):
         category = Category.objects.create(
             user_id=user,
             name=validated_data['name'],
+            description=validated_data['description'],
             category_type=validated_data['category_type'],
         )
         
-        if 'description' in validated_data.keys():
-            category.description = validated_data['description']
             
         return category
 
