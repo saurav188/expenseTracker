@@ -90,6 +90,9 @@ const Transaction = () => {
       ],
     });
   };
+    const refreshTableData = () => {
+    getTransactionData(); // Re-fetch transaction data
+  };
 
   return (
     <div>
@@ -98,7 +101,7 @@ const Transaction = () => {
         <div className="title-container">
           <h1>Transaction</h1>
         </div>
-        <CreateTransaction />
+        <CreateTransaction refreshTableData={refreshTableData} />
         <Table striped bordered hover>
           <thead>
             <tr>

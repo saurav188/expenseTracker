@@ -3,7 +3,7 @@ import axios from "axios";
 import getToken from "../../hooks/GetToken";
 import Button from "react-bootstrap/esm/Button";
 
-const CreateTransaction = () => {
+const CreateTransaction = ({refreshTableData}) => {
   const token = getToken();
   const [show, setShow] = useState(false);
 
@@ -92,7 +92,8 @@ const CreateTransaction = () => {
         }
       );
       console.log("Form submitted successfully:", response.data);
-
+      //refresh table function callback
+       refreshTableData()
       // Reset form and hide modal
       setShow(false);
       setAccountId("");

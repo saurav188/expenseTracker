@@ -17,24 +17,9 @@ import {
 // Register Chart.js components
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-/**
- * Generate an array of days for a given month and year.
- * @param {number} year - The year (e.g., 2024).
- * @param {number} month - The month (1 = January, 12 = December).
- * @returns {Array} Array of day numbers (e.g., [1, 2, 3, ..., 31]).
- */
-const generateDays = (year, month) => {
-  const daysInMonth = new Date(year, month, 0).getDate(); // Get total days in the month
-  return Array.from({ length: daysInMonth }, (_, i) => i + 1); // Generate days [1, 2, ..., daysInMonth]
-};
-
-// Example: February 2024 (Leap Year)
-const year = 2024;
-const month = 2; // February
-const days = generateDays(year, month);
-
 const LineGraph = () => {
   const [graphData, setGraphData] = useState([]);
+  const [graphDates,setGraphDates]=useState([]);
   const token = getToken();
 
   useEffect(() => {
@@ -48,8 +33,9 @@ const LineGraph = () => {
           Authorization: `Token ${token}`,
         },
       });
+      setGraphDates(response.data.dates)
       setGraphData(response.data.data);
-      console.log(response.data.data, "graph data");
+      console.log(response.data, "graph line data");
     } catch (error) {
       console.log("Error Fetching Graph Data", error);
     }
@@ -57,7 +43,7 @@ const LineGraph = () => {
 
   // Chart.js data
   const data = {
-    labels: days,
+    labels: graphDates,
     datasets: [
       {
         label: "Increase/Decrease",
@@ -83,14 +69,14 @@ const LineGraph = () => {
       },
       title: {
         display: true,
-        text: "Monthly Expense Tracking",
+        text: "Monthly Expense Forcasting",
       },
     },
   };
-
+// style={{ width: auto,height:"6000px",backgroundColor:"red", margin: "50px auto" }}
   return (
-    <div style={{ width: "600px", margin: "50px auto" }}>
-      <Line data={data} options={options} />
+    <div className="w-full  px-5" >
+      <Line style={{ width:"100%"}} data={data} options={options} />
     </div>
   );
 };
