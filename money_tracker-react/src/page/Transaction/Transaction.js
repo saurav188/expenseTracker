@@ -21,7 +21,7 @@ const Transaction = () => {
   };
 
   let nextPage = () => {
-    if (Page <= MaxPage) setPage(Page + 1);
+    if (Page < MaxPage) setPage(Page + 1);
   };
 
 
@@ -36,24 +36,17 @@ const Transaction = () => {
         `http://localhost:8000/api/acc/transaction/?page=${Page}`,
         {
           headers: header,
-          params: {
-            account_id: 16,
-            category: 6,
-          },
         }
       );
-      console.log(response,"consolePage")
-      // setMaxPage(response["num_pages"]);
-      if (response.data && response.data.length > 0) {
-        setTransactionData(response.data); 
-      } else {
-        setTransactionData([]); 
-      }
+      console.log(response.data.num_pages,"consolePage")
+        setTransactionData(response.data.data); 
+      setMaxPage(response.data.num_pages);
     } catch (err) {
       setError("Error fetching transaction data");
       console.error(err);
     }
   };
+
 
   useEffect(() => {
     getTransactionData();
