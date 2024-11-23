@@ -143,7 +143,8 @@ class TransactionSerializer(serializers.ModelSerializer):
             account_id=validated_data['account_id'],
             category_id=validated_data['category_id'],
             amount=validated_data['amount'],
-            trn_date=validated_data['trn_date']
+            trn_date=validated_data['trn_date'],
+            note=validated_data['note'],
         )
         
         if 'note' in validated_data.keys():

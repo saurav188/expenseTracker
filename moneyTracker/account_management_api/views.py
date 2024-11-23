@@ -60,7 +60,7 @@ class AccountAPI(APIView):
                 return Response({"status":False,"message":"requested data doesnot exist"}, status=status.HTTP_400_BAD_REQUEST)
             try:
                 page = request.GET.get('page',1)
-                page_size = 10
+                page_size = 5
                 paginator = Paginator(objs, page_size)
                 serializer = AccountSerializer(paginator.page(page), many=True)
                 return Response({"status":True,"message":"account detail successfully retried","num_pages":paginator.num_pages,"data":serializer.data}, status=status.HTTP_200_OK)
@@ -144,7 +144,7 @@ class CategoryAPI(APIView):
                 return Response({"status":False,"message":"requested data doesnot exist"}, status=status.HTTP_400_BAD_REQUEST)
             try:
                 page = request.GET.get('page',1)
-                page_size = 10
+                page_size = 5
                 paginator = Paginator(objs, page_size)
                 serializer = CategorySerializer(paginator.page(page), many=True)
                 return Response({"status":True,"message":"category detail successfully retried","num_pages":paginator.num_pages,"data":serializer.data}, status=status.HTTP_200_OK)
@@ -276,7 +276,7 @@ class TransactionAPI(APIView):
                 return Response({"status":False,"message":"requested data doesnot exist"}, status=status.HTTP_400_BAD_REQUEST)
             try:
                 page = request.GET.get('page',1)
-                page_size = 10
+                page_size = 5
                 paginator = Paginator(objs, page_size)
                 serializer = TransactionSerializer(paginator.page(page), many=True)
                 return Response({"status":True,"message":"transactions retrieved","num_pages":paginator.num_pages,"data":serializer.data},status = status.HTTP_200_OK)
