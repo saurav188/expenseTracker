@@ -5,6 +5,8 @@ import getToken from "../hooks/GetToken";
 import Button from "react-bootstrap/esm/Button";
 import { useNavigate } from "react-router-dom";
 import AddBalance from "../components/AddBalanceToAccount";
+import LineGraph from "../components/Charts/lineGraph";
+import DonutChart from "../components/Charts/donutGraph";
 
 function Dashboard() {
   const token = getToken();
@@ -134,7 +136,14 @@ function Dashboard() {
         {/* Graph Section */}
         <div className="bg-white shadow-md rounded-lg p-6 mt-6 text-center">
           <h2 className="text-xl font-semibold">Show Graph</h2>
-          {/* You can add the graph here */}
+          <div className="grid grid-cols-12 gap-5">
+            <div className="col-span-6">
+          <LineGraph/>
+          </div>
+          <div className="col-span-6">
+            <DonutChart/>
+          </div>
+          </div>
         </div>
       </div>
     </>

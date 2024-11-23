@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import getToken from "../../hooks/GetToken";
+import Button from "react-bootstrap/esm/Button";
 
 const CreateTransaction = () => {
   const token = getToken();
@@ -278,12 +279,12 @@ const handleCategorySearch = async (name) => {
 
   return (
     <>
-      <button
+      <Button
         onClick={() => setShow(true)}
-        className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        // className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
       >
         New
-      </button>
+      </Button>
 
       {show && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
@@ -292,26 +293,26 @@ const handleCategorySearch = async (name) => {
               <h2 className="text-xl font-semibold">New Transaction</h2>
               <button
                 onClick={() => setShow(false)}
-                className="text-gray-600 hover:text-gray-800"
+                className="text-gray-600 text-xl hover:text-gray-800"
               >
-                &times;
+               X
               </button>
             </div>
             {TransactionForm()}
             <div className="flex justify-end gap-2 mt-4">
-              <button
+              <Button
                 onClick={() => setShow(false)}
-                className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none"
+                // className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none"
               >
                 Close
-              </button>
-              <button
+              </Button>
+              <Button
                 type="submit"
                 form="transactionForm"
-                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                // className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 Submit
-              </button>
+              </Button>
             </div>
           </div>
         </div>
