@@ -52,7 +52,8 @@ function Dashboard() {
           },
         }
       );
-      setTransactionData(response.data || []);
+      setTransactionData(response.data.data || []);
+      console.log(response.data.data,"transaction")
     } catch (err) {
       console.error("Error fetching transaction data:", err);
     }
@@ -65,8 +66,12 @@ function Dashboard() {
         <div className="flex flex-row items-center justify-between">
           <h1 className="text-3xl font-bold mt-8 mb-6 ">Dashboard</h1>
           <div className="flex flex-row gap-5">
-            <AddBalance />
-            <Button>Add Expense</Button>
+            <Button
+            className="rounded-md"
+            onClick={()=>{
+              navigate("/transaction")
+            }
+            }>Add Transaction</Button>
           </div>
         </div>
 
@@ -83,7 +88,7 @@ function Dashboard() {
               </Button>
             </div>
 
-            <ul>
+            <ul className="max-h-80 overflow-auto border-2 border-gray-300 rounded-lg p-4">
               {isAccount.length > 0 ? (
                 isAccount.map((account) => (
                   <li
@@ -93,9 +98,13 @@ function Dashboard() {
                     <div>
                       <p className="text-lg font-bold">{account.name}</p>
                     </div>
-                    <div className="text-green-600 font-bold">
-                      ${account.amount}
-                    </div>
+                     {account.balance>=0?(   <div className="text-green-600 font-bold">
+                      Rs{account.balance}
+                    </div>):
+                    (   <div className="text-red-600 font-bold">
+                      Rs{Math.abs(account.balance)}
+                    </div>)}
+                 
                   </li>
                 ))
               ) : (
@@ -107,7 +116,7 @@ function Dashboard() {
           {/* Recent Transaction Section */}
           <div className="bg-white shadow-md rounded-lg p-6">
             <h2 className="text-xl font-semibold mb-4">Recent Transactions</h2>
-            <div className="h-[30vh] overflow-auto border-2 border-gray-300 rounded-lg p-4">
+            <div className="max-h-80 overflow-auto border-2 border-gray-300 rounded-lg p-4">
               {transactionData.length > 0 ? (
                 <ul>
                   {transactionData.map((transaction) => (
@@ -115,14 +124,26 @@ function Dashboard() {
                       key={transaction.id}
                       className="mb-4 p-3 bg-gray-50 rounded-lg shadow-sm"
                     >
-                      <div className="text-gray-700">
-                        <span className="font-semibold">Amount:</span> $
+                      <div className="flex flex-row justify-between">
+                       <div className="text-gray-700">
+                        <span className="font-semibold">Transaction Type:</span>{" "}
+                       <span className="font-semibold"> {transaction.category_name}</span>
+                      </div>
+                      <div className="text-gray-500">
+                        Rs.
                         {transaction.amount.toFixed(2)}
+                      </div>
                       </div>
                       <div className="text-gray-500">
                         <span className="font-semibold">Note:</span>{" "}
-                        {transaction.note}
+                       {transaction.note ? (
+                          <span className="font-semibold">{transaction.note}</span>
+                            ) : (
+                            <span>Empty</span>
+                            )}
+                      
                       </div>
+                     
                     </li>
                   ))}
                 </ul>
@@ -137,10 +158,10 @@ function Dashboard() {
         <div className="bg-white shadow-md rounded-lg p-6 mt-6 text-center">
           <h2 className="text-xl font-semibold">Show Graph</h2>
           <div className="grid grid-cols-12 gap-5">
-            <div className="col-span-6">
+            <div className="col-span-9">
           <LineGraph/>
           </div>
-          <div className="col-span-6">
+          <div className="col-span-3">
             <DonutChart/>
           </div>
           </div>

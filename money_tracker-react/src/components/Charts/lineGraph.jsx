@@ -17,24 +17,9 @@ import {
 // Register Chart.js components
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-/**
- * Generate an array of days for a given month and year.
- * @param {number} year - The year (e.g., 2024).
- * @param {number} month - The month (1 = January, 12 = December).
- * @returns {Array} Array of day numbers (e.g., [1, 2, 3, ..., 31]).
- */
-const generateDays = (year, month) => {
-  const daysInMonth = new Date(year, month, 0).getDate(); // Get total days in the month
-  return Array.from({ length: daysInMonth }, (_, i) => i + 1); // Generate days [1, 2, ..., daysInMonth]
-};
-
-// Example: February 2024 (Leap Year)
-const year = 2024;
-const month = 2; // February
-const days = generateDays(year, month);
-
 const LineGraph = () => {
   const [graphData, setGraphData] = useState([]);
+  const [graphDates, setGraphDates] = useState([]);
   const token = getToken();
 
   useEffect(() => {
@@ -48,8 +33,31 @@ const LineGraph = () => {
           Authorization: `Token ${token}`,
         },
       });
-      setGraphData(response.data.data);
-      console.log(response.data.data, "graph data");
+
+      // Get dates from API response
+      const fetchedDates = response.data.dates;
+
+      // Add today's date
+      const today = new Date();
+      const formattedToday = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+
+      if (!fetchedDates.includes(formattedToday)) {
+        fetchedDates.push(formattedToday); // Add today's date if it's not already present
+      }
+
+      // Optional: Sort dates to ensure chronological order
+      fetchedDates.sort((a, b) => new Date(a) - new Date(b));
+
+      // Add placeholder for today's data (if needed)
+      const updatedGraphData = [...response.data.data];
+      if (!response.data.dates.includes(formattedToday)) {
+        updatedGraphData.push(0); // Placeholder value for today's date
+      }
+
+      setGraphDates(fetchedDates);
+      setGraphData(updatedGraphData);
+
+      console.log(response.data, "graph line data");
     } catch (error) {
       console.log("Error Fetching Graph Data", error);
     }
@@ -57,7 +65,7 @@ const LineGraph = () => {
 
   // Chart.js data
   const data = {
-    labels: days,
+    labels: graphDates,
     datasets: [
       {
         label: "Increase/Decrease",
@@ -68,7 +76,7 @@ const LineGraph = () => {
           borderColor: (ctx) => {
             // Dynamically set segment color
             const { p0, p1 } = ctx; // Points of the segment
-            return p1.parsed.y > p0.parsed.y ? "rgb(0, 255, 0)" : " rgb(255, 0, 0)"; // Red if going up, green if going down
+            return p1.parsed.y > p0.parsed.y ? "rgb(0, 255, 0)" : "rgb(255, 0, 0)"; // Green for increase, red for decrease
           },
         },
       },
@@ -83,14 +91,48 @@ const LineGraph = () => {
       },
       title: {
         display: true,
-        text: "Monthly Expense Tracking",
+        text: "Monthly Expense Forecasting",
       },
     },
   };
 
+  // Plugin for drawing vertical dotted line
+  const verticalLinePlugin = {
+    id: "verticalLine",
+    beforeDraw: (chart) => {
+      const ctx = chart.ctx;
+      const xScale = chart.scales.x;
+      const yScale = chart.scales.y;
+
+      // Find the index of today's date in the labels
+      const todayIndex = graphDates.indexOf(
+        `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}-${String(new Date().getDate()).padStart(2, "0")}`
+      );
+
+      if (todayIndex === -1) return; // Exit if today's date is not found
+
+      // Calculate the x-coordinate of the vertical line
+      const x = xScale.getPixelForValue(graphDates[todayIndex]);
+
+      // Draw the vertical dotted line
+      ctx.save();
+      ctx.beginPath();
+      ctx.setLineDash([5, 5]); // Dotted line pattern
+      ctx.moveTo(x, yScale.top); // Start at the top of the chart
+      ctx.lineTo(x, yScale.bottom); // Draw to the bottom of the chart
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = "rgba(0, 0, 0, 0.7)"; // Black line with 70% opacity
+      ctx.stroke();
+      ctx.restore();
+    },
+  };
+
+  // Register the plugin
+  ChartJS.register(verticalLinePlugin);
+
   return (
-    <div style={{ width: "600px", margin: "50px auto" }}>
-      <Line data={data} options={options} />
+    <div className="w-full px-5">
+      <Line style={{ width: "100%" }} data={data} options={options} />
     </div>
   );
 };

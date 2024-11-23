@@ -3,7 +3,8 @@ import axios from "axios";
 import getToken from "../../hooks/GetToken";
 import Button from "react-bootstrap/esm/Button";
 
-const CreateTransaction = () => {
+
+const CreateTransaction = ({refreshTableData}) => {
   const token = getToken();
   const [show, setShow] = useState(false);
 
@@ -70,6 +71,7 @@ const CreateTransaction = () => {
 
   // Handle form submission
   const handleSubmit = async (e) => {
+
     e.preventDefault();
 
     if (!validateForm()) return;
@@ -80,7 +82,6 @@ const CreateTransaction = () => {
       amount,
       note,
     };
-
     try {
       const response = await axios.post(
         `http://localhost:8000/api/acc/transaction/`,
@@ -92,6 +93,9 @@ const CreateTransaction = () => {
         }
       );
       console.log("Form submitted successfully:", response.data);
+
+
+      refreshTableData();
 
       // Reset form and hide modal
       setShow(false);
@@ -213,7 +217,7 @@ const handleCategorySearch = async (name) => {
     <input
       type="text"
       id="categoryId"
-      value={categorySearchTerm}  // Set to categorySearchTerm directly
+      value={categoryName }  // Set to categorySearchTerm directly
       onChange={(e) => {
         const searchValue = e.target.value;
         setCategoryName(searchValue);  // Set category name for controlled input
@@ -233,7 +237,8 @@ const handleCategorySearch = async (name) => {
             className="px-4 py-2 hover:bg-indigo-100 cursor-pointer"
             onClick={() => {
               setCategorySearchTerm(category.name);  // Set selected category name in input
-              setCategoryId(category.id);  // Set selected category ID
+              setCategoryId(category.id);
+              setCategoryName(category.name)  // Set selected category ID
               setFilteredCategories([]);  // Clear the dropdown list after selection
             }}
           >
@@ -281,7 +286,7 @@ const handleCategorySearch = async (name) => {
     <>
       <Button
         onClick={() => setShow(true)}
-        // className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="px-4 py-2 my-2 text-white rounded-md  focus:outline-none "
       >
         New
       </Button>
@@ -293,23 +298,23 @@ const handleCategorySearch = async (name) => {
               <h2 className="text-xl font-semibold">New Transaction</h2>
               <button
                 onClick={() => setShow(false)}
-                className="text-gray-600 text-xl hover:text-gray-800"
+                className="text-gray-600 hover:text-gray-800"
               >
-               X
+                X
               </button>
             </div>
             {TransactionForm()}
             <div className="flex justify-end gap-2 mt-4">
-              <Button
+              <button
                 onClick={() => setShow(false)}
-                // className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none"
+                className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none"
               >
                 Close
-              </Button>
+              </button>
               <Button
                 type="submit"
                 form="transactionForm"
-                // className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="px-4 py-2  text-white rounded-md focus:outline-none focus:ring-2 f"
               >
                 Submit
               </Button>
