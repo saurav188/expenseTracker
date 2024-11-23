@@ -46,7 +46,7 @@ const DonutChart = () => {
     labels: graphLabels, 
     datasets: [
       {
-        label: "Budget Distribution",
+        label: "Expense Distribution",
         data: graphData, 
         backgroundColor: [
           "rgba(75, 192, 192, 0.8)", 
