@@ -78,7 +78,7 @@ const DonutChart = () => {
       },
       title: {
         display: true,
-        text: "Monthly Budget Distribution",
+        text: "Expense Distribution",
       },
     },
   };
