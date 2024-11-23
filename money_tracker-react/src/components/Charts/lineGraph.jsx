@@ -96,6 +96,40 @@ const LineGraph = () => {
     },
   };
 
+  // Plugin for drawing vertical dotted line
+  const verticalLinePlugin = {
+    id: "verticalLine",
+    beforeDraw: (chart) => {
+      const ctx = chart.ctx;
+      const xScale = chart.scales.x;
+      const yScale = chart.scales.y;
+
+      // Find the index of today's date in the labels
+      const todayIndex = graphDates.indexOf(
+        `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}-${String(new Date().getDate()).padStart(2, "0")}`
+      );
+
+      if (todayIndex === -1) return; // Exit if today's date is not found
+
+      // Calculate the x-coordinate of the vertical line
+      const x = xScale.getPixelForValue(graphDates[todayIndex]);
+
+      // Draw the vertical dotted line
+      ctx.save();
+      ctx.beginPath();
+      ctx.setLineDash([5, 5]); // Dotted line pattern
+      ctx.moveTo(x, yScale.top); // Start at the top of the chart
+      ctx.lineTo(x, yScale.bottom); // Draw to the bottom of the chart
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = "rgba(0, 0, 0, 0.7)"; // Black line with 70% opacity
+      ctx.stroke();
+      ctx.restore();
+    },
+  };
+
+  // Register the plugin
+  ChartJS.register(verticalLinePlugin);
+
   return (
     <div className="w-full px-5">
       <Line style={{ width: "100%" }} data={data} options={options} />
