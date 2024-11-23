@@ -247,6 +247,8 @@ class TimeSeriesAPI(APIView):
         for dt in range(1, num_days+1):
             day = (utc.localize(datetime.datetime.now() + datetime.timedelta(dt))).date()
             dates.append(day)
+        print(len(trns+ forecast))
+        print(len(dates))
         return Response({
                 "status":True,
                 "message":"forecasting successfully",
