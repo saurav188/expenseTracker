@@ -237,7 +237,7 @@ class TimeSeriesAPI(APIView):
         return Response({
                 "status":True,
                 "message":"forecasting successfully",
-                "data":forecast
+                "data":trns + forecast,
             },
             status = status.HTTP_200_OK
         )
