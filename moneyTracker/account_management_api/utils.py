@@ -11,12 +11,14 @@ import pickle
 # walk-forward validation
 def get_time_series(trns):
     predictions = []
+    history = trns.copy()
     for t in range(30):
-        model = ARIMA(trns, order=(6,1,1))
+        model = ARIMA(history, order=(10,2,1))
         model_fit = model.fit()
         output = model_fit.forecast()
         yhat = max(output[0],0)
         predictions.append(yhat)
+        history.append(yhat)
         # trns.append(yhat)
     return predictions
 
@@ -59,5 +61,15 @@ def get_category(input):
     y = np.array(model.predict(padded).argmax())
     return labels[y]
 
+from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
+transformer_model = AutoModelForSequenceClassification.from_pretrained("mgrella/autonlp-bank-transaction-classification-5521155")
+transformer_tokenizer = AutoTokenizer.from_pretrained("mgrella/autonlp-bank-transaction-classification-5521155")
+
+def get_category2(text):
+    inputs = transformer_tokenizer(text, return_tensors="pt")
+    logits = transformer_model(**inputs).logits
+    predicted_class_id = logits.argmax().item()
+    
+    return transformer_model.config.id2label[predicted_class_id].split('.')[1].split('_')[0]
 

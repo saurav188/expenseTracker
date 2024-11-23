@@ -16,7 +16,7 @@ from rest_framework.pagination import PageNumberPagination
 from django.core.paginator import Paginator
 import datetime
 import pytz
-from .utils import get_time_series, get_category
+from .utils import get_time_series, get_category, get_category2
 from django.db.models import Sum , Count         
 
 utc=pytz.UTC
@@ -99,7 +99,7 @@ class CategoryDonut(APIView):
 
     def get(self, request, format= None):
         categories = { i.id:i.name for i in Category.objects.filter(user_id = request.user)}
-        trns = Transaction.objects.filter(user_id = request.user).values('category_id').annotate(total_amount=Sum('amount'))
+        trns = (Transaction.objects.filter(user_id = request.user).filter(category_id__category_type = 'EXP').values('category_id').annotate(total_amount=Sum('amount')))
         for obj in trns:
             obj['category_name'] = categories[obj['category_id']]
             
@@ -180,7 +180,7 @@ class ExpenseClassification(APIView):
 
     def post(self, request, format= None):
         remarks = request.data['remarks']
-        cat = get_category(remarks)
+        cat = get_category2(remarks)
         cat_id = Category.objects.filter(user_id = request.user).get(name__icontains=cat).id
         return Response({
                 "status":True,
@@ -199,7 +199,7 @@ class TimeSeriesAPI(APIView):
     
     def get(self, request, format= None):
         num_days = 30
-        objs = Transaction.objects.filter(user_id = request.user)
+        objs = Transaction.objects.filter(user_id = request.user).filter(category_id__category_type = 'EXP')
         amts = []
         dates = []
         for obj in objs:
@@ -247,8 +247,6 @@ class TimeSeriesAPI(APIView):
         for dt in range(1, num_days+1):
             day = (utc.localize(datetime.datetime.now() + datetime.timedelta(dt))).date()
             dates.append(day)
-        print(len(trns+ forecast))
-        print(len(dates))
         return Response({
                 "status":True,
                 "message":"forecasting successfully",
