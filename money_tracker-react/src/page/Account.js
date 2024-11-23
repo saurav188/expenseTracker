@@ -193,7 +193,7 @@ const handleError = (message) => {
 
   let renderModalForm = () => {
     return (
-      <Modal.Dialog className="mh-75 overflow-auto">
+      <Modal.Dialog className="">
         <Modal.Header>
           <Modal.Title>{ModalTitle}</Modal.Title>
         </Modal.Header>

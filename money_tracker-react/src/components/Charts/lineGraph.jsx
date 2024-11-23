@@ -19,7 +19,7 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, T
 
 const LineGraph = () => {
   const [graphData, setGraphData] = useState([]);
-  const [graphDates,setGraphDates]=useState([]);
+  const [graphDates, setGraphDates] = useState([]);
   const token = getToken();
 
   useEffect(() => {
@@ -33,8 +33,30 @@ const LineGraph = () => {
           Authorization: `Token ${token}`,
         },
       });
-      setGraphDates(response.data.dates)
-      setGraphData(response.data.data);
+
+      // Get dates from API response
+      const fetchedDates = response.data.dates;
+
+      // Add today's date
+      const today = new Date();
+      const formattedToday = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+
+      if (!fetchedDates.includes(formattedToday)) {
+        fetchedDates.push(formattedToday); // Add today's date if it's not already present
+      }
+
+      // Optional: Sort dates to ensure chronological order
+      fetchedDates.sort((a, b) => new Date(a) - new Date(b));
+
+      // Add placeholder for today's data (if needed)
+      const updatedGraphData = [...response.data.data];
+      if (!response.data.dates.includes(formattedToday)) {
+        updatedGraphData.push(0); // Placeholder value for today's date
+      }
+
+      setGraphDates(fetchedDates);
+      setGraphData(updatedGraphData);
+
       console.log(response.data, "graph line data");
     } catch (error) {
       console.log("Error Fetching Graph Data", error);
@@ -54,7 +76,7 @@ const LineGraph = () => {
           borderColor: (ctx) => {
             // Dynamically set segment color
             const { p0, p1 } = ctx; // Points of the segment
-            return p1.parsed.y > p0.parsed.y ? "rgb(0, 255, 0)" : " rgb(255, 0, 0)"; // Red if going up, green if going down
+            return p1.parsed.y > p0.parsed.y ? "rgb(0, 255, 0)" : "rgb(255, 0, 0)"; // Green for increase, red for decrease
           },
         },
       },
@@ -69,14 +91,14 @@ const LineGraph = () => {
       },
       title: {
         display: true,
-        text: "Monthly Expense Forcasting",
+        text: "Monthly Expense Forecasting",
       },
     },
   };
-// style={{ width: auto,height:"6000px",backgroundColor:"red", margin: "50px auto" }}
+
   return (
-    <div className="w-full  px-5" >
-      <Line style={{ width:"100%"}} data={data} options={options} />
+    <div className="w-full px-5">
+      <Line style={{ width: "100%" }} data={data} options={options} />
     </div>
   );
 };

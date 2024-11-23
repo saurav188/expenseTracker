@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Button from "react-bootstrap/esm/Button";
 import Table from "react-bootstrap/esm/Table";
 import getToken from "../../hooks/GetToken";
 import NavBar from "../../components/NavbarHeader";
@@ -95,13 +94,15 @@ const Transaction = () => {
   };
 
   return (
-    <div>
+    <div className="">
       <NavBar />
-      <div className="p-5 gap-4">
+      <div className="p-5 gap-4 flex flex-col mx-5">
         <div className="title-container">
           <h1>Transaction</h1>
         </div>
+        <div>
         <CreateTransaction refreshTableData={refreshTableData} />
+        </div>
         <Table striped bordered hover>
           <thead>
             <tr>

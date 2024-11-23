@@ -88,7 +88,7 @@ function Dashboard() {
               </Button>
             </div>
 
-            <ul className="max-h-80 overflow-y-auto">
+            <ul className="max-h-80 overflow-auto border-2 border-gray-300 rounded-lg p-4">
               {isAccount.length > 0 ? (
                 isAccount.map((account) => (
                   <li
@@ -116,7 +116,7 @@ function Dashboard() {
           {/* Recent Transaction Section */}
           <div className="bg-white shadow-md rounded-lg p-6">
             <h2 className="text-xl font-semibold mb-4">Recent Transactions</h2>
-            <div className="h-[30vh] overflow-auto border-2 border-gray-300 rounded-lg p-4">
+            <div className="max-h-80 overflow-auto border-2 border-gray-300 rounded-lg p-4">
               {transactionData.length > 0 ? (
                 <ul>
                   {transactionData.map((transaction) => (
@@ -124,14 +124,26 @@ function Dashboard() {
                       key={transaction.id}
                       className="mb-4 p-3 bg-gray-50 rounded-lg shadow-sm"
                     >
-                      <div className="text-gray-700">
-                        <span className="font-semibold">Amount:</span> $
+                      <div className="flex flex-row justify-between">
+                       <div className="text-gray-700">
+                        <span className="font-semibold">Transaction Type:</span>{" "}
+                       <span className="font-semibold"> {transaction.category_name}</span>
+                      </div>
+                      <div className="text-gray-500">
+                        Rs.
                         {transaction.amount.toFixed(2)}
+                      </div>
                       </div>
                       <div className="text-gray-500">
                         <span className="font-semibold">Note:</span>{" "}
-                        {transaction.note}
+                       {transaction.note ? (
+                          <span className="font-semibold">{transaction.note}</span>
+                            ) : (
+                            <span>Empty</span>
+                            )}
+                      
                       </div>
+                     
                     </li>
                   ))}
                 </ul>
