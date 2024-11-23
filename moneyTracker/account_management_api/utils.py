@@ -11,13 +11,13 @@ import pickle
 # walk-forward validation
 def get_time_series(trns):
     predictions = []
-    for t in range(28):
+    for t in range(30):
         model = ARIMA(trns, order=(6,1,1))
         model_fit = model.fit()
         output = model_fit.forecast()
         yhat = max(output[0],0)
         predictions.append(yhat)
-        trns.append(yhat)
+        # trns.append(yhat)
     return predictions
 
 max_length = 256

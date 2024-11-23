@@ -207,6 +207,15 @@ class TimeSeriesAPI(APIView):
                 continue
             amts.append(obj.amount)
             dates.append(obj.trn_date)
+        if len(amts)==0:
+            return Response({
+                    "status":True,
+                    "message":"forecasting successfully",
+                    "data":[],
+                    "dates":[]
+                },
+                status = status.HTTP_200_OK
+            )
         combined = list(zip(dates, amts))
         combined_sorted = sorted(combined, key=lambda x: x[0])
         sorted_trn_date, sorted_trn_amt = zip(*combined_sorted)
@@ -226,18 +235,25 @@ class TimeSeriesAPI(APIView):
                 day_amt_hash[sorted_trn_date[i].date()] = sorted_trn_amt[i]
 
         trns = []
+        dates = []
         for dt in range(1, num_days+1):
             day = (temp_date + datetime.timedelta(dt)).date()
+            dates.append(day)
             if day in day_amt_hash.keys():
                 trns.append(day_amt_hash[day])
             else:
                 trns.append(0.0)
         forecast = get_time_series(trns)
-
+        for dt in range(1, num_days+1):
+            day = (utc.localize(datetime.datetime.now() + datetime.timedelta(dt))).date()
+            dates.append(day)
+        print(len(trns+ forecast))
+        print(len(dates))
         return Response({
                 "status":True,
                 "message":"forecasting successfully",
-                "data":forecast
+                "data":trns + forecast,
+                "dates":dates
             },
             status = status.HTTP_200_OK
         )
