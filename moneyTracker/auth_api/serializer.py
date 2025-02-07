@@ -16,7 +16,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username', 'password', 'password2', 'email', 'first_name', 'last_name', 'address', 'phone_no', 'profile_picture')
+        fields = ('username', 'password', 'password2', 'email', 'first_name', 'last_name')
         extra_kwargs = {
             'first_name': {'required': True},
             'last_name': {'required': True}
@@ -60,7 +60,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username', 'password', 'password2', 'email', 'first_name', 'last_name', 'address', 'phone_no', 'profile_picture')
+        fields = ('username', 'password', 'password2', 'email', 'first_name', 'last_name')
 
     def validate(self, attrs):
         if attrs['password'] and attrs['password'] != attrs['password2']:
@@ -79,12 +79,12 @@ class UserUpdateSerializer(serializers.ModelSerializer):
             user.first_name = validated_data['first_name']
         if validated_data['last_name']:
             user.last_name = validated_data['last_name']
-        if validated_data['phone_no']:
-            user.phone_no = validated_data['phone_no']
-        if validated_data['address']:
-            user.address = validated_data['address']
-        if validated_data.get('profile_picture'):
-            user.profile_picture = validated_data['profile_picture']
+        # if validated_data['phone_no']:
+        #     user.phone_no = validated_data['phone_no']
+        # if validated_data['address']:
+        #     user.address = validated_data['address']
+        # if validated_data.get('profile_picture'):
+        #     user.profile_picture = validated_data['profile_picture']
         if validated_data.get('password'):
             user.set_password(validated_data['password'])
         user.save()

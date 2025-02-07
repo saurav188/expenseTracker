@@ -47,6 +47,7 @@ function Registration() {
       if (data['status']) {
         navigate("/login");
       } else {
+        console.log(data)
         let temp = Error;
         for (var key in temp) {
           if (key in data['message'])
@@ -54,6 +55,7 @@ function Registration() {
           else
             temp[key] = '';
         }
+        console.log(temp)
         setError(temp);
       }
     })

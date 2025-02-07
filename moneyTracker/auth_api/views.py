@@ -45,15 +45,20 @@ class UserDetailAPI(APIView):
 class LoginAPI(APIView):
     def post(self, request, format=None):
         data = request.data
+        print(data)
         serializer = LoginSerializer(data=data)
         if not serializer.is_valid():
             return Response({"status":False,"message":serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
-        # serializer.save()
+        print('*')
+        print(serializer.data)
         try:
             u_name = User.objects.get(email = serializer.data['email']).username
+            print(u_name)
             user = authenticate(username = u_name, password = serializer.data['password'])
-        except:
+        except Exception as e:
+            print('exception:',e)
             return Response({"status":False,"message":serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+        print('**')
         if not user:
             return Response({"status":False,"message":serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 

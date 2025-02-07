@@ -2,13 +2,13 @@ from django.db import models
 from django.contrib.auth.models import User 
 
 # Create your models here.
-class User(User):
-    profile_picture=models.ImageField(upload_to='img/user_profile_picture',null=True, blank=True)
-    phone_no=models.IntegerField(null=True, blank=True)
-    address=models.CharField(null=True,max_length=200,blank=True)
+# class BaseUser(User):
+#     profile_picture=models.ImageField(upload_to='img/user_profile_picture',null=True, blank=True)
+#     phone_no=models.IntegerField(null=True, blank=True)
+#     address=models.CharField(null=True,max_length=200,blank=True)
 
-    def __str__(self):
-        return self.username
+#     def __str__(self):
+#         return self.username
 
 from django.dispatch import receiver
 from django.urls import reverse

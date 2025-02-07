@@ -25,9 +25,9 @@ def get_time_series(trns):
 max_length = 256
 trunc_type = 'pre'
 padding_type = 'pre'
-labels = ['BILLS', 'CREDIT', 'EATING', 'HEALTH', 'HOUSING', 'LEISURE',
-       'MORTGAGES', 'OTHER', 'PROFITS', 'SHOPPING', 'TAXES', 'TRANSFERS',
-       'TRAVELS', 'WAGES']
+labels = ['Bills', 'Credit', 'Eating', 'Health', 'Housing', 'Leisure',
+       'Mortgages', 'Other', 'Profits', 'Shopping', 'Taxes', 'Transfer',
+       'Travels', 'Wages']
 
 with open('./models/word_index.json', 'rb') as handle:
     tokenizer = json.load(handle)
