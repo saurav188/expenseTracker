@@ -1,8 +1,7 @@
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import NavDropdown from "react-bootstrap/NavDropdown";
-import MenuBar from "../components/MenuBar";
+import MenuBar from "./MenuBar";
 import getToken from "../hooks/GetToken";
 
 import { useEffect, useState } from "react";
@@ -10,7 +9,7 @@ import Logout from "../hooks/Logout";
 import { useNavigate } from "react-router-dom";
 import { Dropdown, Space } from "antd";
 import axios from "axios";
-import { iconColor } from "../page/Login";
+import { iconColor } from "../page/Auth/Login";
 
 function NavBar(props) {
   const token = getToken();

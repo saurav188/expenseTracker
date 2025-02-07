@@ -1,16 +1,19 @@
 import React from "react";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Dashboard from "./page/Dashboard";
-import Account from "./page/Account";
-import Category from "./page/Category";
-import Login from "./page/Login";
-import Registration from "./page/Registration";
-import UserDetail from "./page/UserDetail";
-import PasswordResetEmail from "./page/PasswordResetEmail";
-import PasswordResetConfirm from "./page/PasswordResetConfirm";
+// import Dashboard from "./page/Dashboard";
+// import Account from "./page/Account";
+// import Category from "./page/Category";
+import Login from "./page/Auth/Login";
+import Registration from "./page/Auth/Registration";
+import UserDetail from "./page/userDetail/UserDetail";
+import PasswordResetEmail from "./page/Auth/PasswordResetEmail";
+import PasswordResetConfirm from "./page/Auth/PasswordResetConfirm";
 import Error from "./page/Error";
 import Transaction from "./page/Transaction/Transaction";
+import Dashboard from "./page/dashboard/Dashboard";
+import Category from "./page/category/Category";
+import Account from "./page/account/Account";
 
 function App() {
   function getToken() {

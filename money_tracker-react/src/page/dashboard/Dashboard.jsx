@@ -1,12 +1,13 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
-import NavbarHeader from "../components/NavbarHeader";
+import NavbarHeader from "../../components/NavbarHeader";
 import axios from "axios";
-import getToken from "../hooks/GetToken";
+import getToken from "../../hooks/GetToken";
 import Button from "react-bootstrap/esm/Button";
 import { useNavigate } from "react-router-dom";
-import AddBalance from "../components/AddBalanceToAccount";
-import LineGraph from "../components/Charts/lineGraph";
-import DonutChart from "../components/Charts/donutGraph";
+// import AddBalance from "../components/AddBalanceToAccount";
+import LineGraph from "../../components/Charts/lineGraph";
+import DonutChart from "../../components/Charts/donutGraph";
 
 function Dashboard() {
   const token = getToken();

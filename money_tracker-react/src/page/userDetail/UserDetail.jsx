@@ -1,10 +1,10 @@
 import {React, useState} from "react";
-import NavbarHeader from "../components/NavbarHeader";
-import getToken  from "../hooks/GetToken";
+import NavbarHeader from "../../components/NavbarHeader";
+import getToken  from "../../hooks/GetToken";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { Link, useNavigate } from "react-router-dom";
-import useRunOnce from "../hooks/useRunOnce";
+import {  useNavigate } from "react-router-dom";
+import useRunOnce from "../../hooks/useRunOnce";
 
 function UserDetail() {
   const [username, setUsername] = useState('');
@@ -56,7 +56,7 @@ function UserDetail() {
   let Update = (ev)=>{
     ev.preventDefault()
     let data;
-    if(password!=''){
+    if(password!==''){
       data= {
         username:username,
         password:password,

@@ -5,8 +5,8 @@ import * as Yup from "yup";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "../style/login.css";
-import MoneyTrackerLogo1 from "../assets/Logo/MoneyTrackerLogo1.png";
+// import "../style/login.css";
+import MoneyTrackerLogo1 from "../../assets/Logo/MoneyTrackerLogo1.png";
 
 export const iconColor = "rgb(114,196,144)";
 

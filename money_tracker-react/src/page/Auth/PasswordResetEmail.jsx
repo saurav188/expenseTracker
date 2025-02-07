@@ -1,6 +1,6 @@
 import {React,useState} from "react";
 import { useNavigate } from "react-router-dom";
-import NavbarHeader from "../components/NavbarHeader";
+import NavbarHeader from "../../components/NavbarHeader";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 

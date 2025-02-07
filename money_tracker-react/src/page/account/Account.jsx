@@ -1,8 +1,8 @@
 import { React, useState, useEffect } from "react";
-import NavbarHeader from "../components/NavbarHeader";
+import NavbarHeader from "../../components/NavbarHeader";
 import Table from "react-bootstrap/Table";
-import getToken from "../hooks/GetToken";
-import useRunOnce from "../hooks/useRunOnce";
+import getToken from "../../hooks/GetToken";
+import useRunOnce from "../../hooks/useRunOnce";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
@@ -258,6 +258,7 @@ const handleError = (message) => {
         <Modal.Footer>
           <Button
             variant="secondary"
+            className="rounded-lg"
             onClick={(ev) => {
               setFormOpen(false);
               resetModalForm();
@@ -265,7 +266,7 @@ const handleError = (message) => {
           >
             Close
           </Button>
-          <Button variant="primary" onClick={(ev) => saveClick()}>
+          <Button variant="primary" className="rounded-lg" onClick={(ev) => saveClick()}>
             Save changes
           </Button>
         </Modal.Footer>
@@ -346,13 +347,14 @@ const handleError = (message) => {
                 <h1>Accounts</h1>
               </div>
               <div className="btn-container d-flex justify-content-between">
-                <Button type="submit" variant="primary" onClick={NewFunction}>
+                <Button type="submit" className="rounded-lg" variant="primary" onClick={NewFunction}>
                   New
                 </Button>
                 <Button
                   id="account_filter_btn"
                   type="submit"
                   variant="secondary"
+                  className="rounded-lg"
                   onClick={filterToggle}
                 >
                   <FaFilter />
