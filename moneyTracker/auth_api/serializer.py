@@ -65,6 +65,8 @@ class UserUpdateSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         if attrs['password'] and attrs['password'] != attrs['password2']:
             raise serializers.ValidationError({"password": "Password fields didn't match."})
+        # if attrs['username'] == None or attrs['username'] == '':
+        #     raise serializers.ValidationError({"username": "Username cannot be empty."})
 
         return attrs
 

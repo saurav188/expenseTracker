@@ -54,7 +54,8 @@ function Category() {
       theme_color_hash: Yup.string().required("Theme color is required"),
       category_type: Yup.string().required("Category type is required"),
     }),
-    onSubmit: async (values) => {
+    handleSubmit: async (values) => {
+      console.log('**')
       let url = `http://localhost:8000/api/acc/category/`;
       const header = {
         "Content-Type": "application/json",

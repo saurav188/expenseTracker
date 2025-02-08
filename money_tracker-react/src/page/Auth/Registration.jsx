@@ -18,7 +18,7 @@ function Registration() {
       last_name: "",
       email: "",
       password: "",
-      confirmPassword: "",
+      password2: "",
     },
     validationSchema: Yup.object({
       username: Yup.string().required("Username is required"),
@@ -28,7 +28,7 @@ function Registration() {
       password: Yup.string()
         .min(6, "Password must be at least 6 characters")
         .required("Password is required"),
-      confirmPassword: Yup.string()
+      password2: Yup.string()
         .oneOf([Yup.ref("password"), null], "Passwords must match")
         .required("Confirm password is required"),
     }),
@@ -41,13 +41,12 @@ function Registration() {
         });
 
         const result = await response.json();
-
         if (response.ok) {
           toast.success("Registration successful! Redirecting to login...");
           setTimeout(() => navigate("/login"), 2000);
         } else {
           Object.keys(result.message || {}).forEach((key) => {
-            toast.error(result.message[key][0]);
+            toast.error(key+': '+result.message[key][0]);
           });
         }
       } catch (err) {
@@ -141,16 +140,16 @@ function Registration() {
                 </div>
 
                 <div className="flex flex-col gap-1">
-                  <label htmlFor="confirmPassword" className="block text-sm font-semibold">Confirm Password</label>
+                  <label htmlFor="password2" className="block text-sm font-semibold">Confirm Password</label>
                   <input
-                    id="confirmPassword"
+                    id="password2"
                     type="password"
                     placeholder="Confirm password"
-                    {...formik.getFieldProps("confirmPassword")}
+                    {...formik.getFieldProps("password2")}
                     className="w-full p-3 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   />
-                  {formik.touched.confirmPassword && formik.errors.confirmPassword && (
-                    <p className="text-red-500 text-sm">{formik.errors.confirmPassword}</p>
+                  {formik.touched.password2 && formik.errors.password2 && (
+                    <p className="text-red-500 text-sm">{formik.errors.password2}</p>
                   )}
                 </div>
               </div>
