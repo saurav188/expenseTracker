@@ -94,6 +94,26 @@ const LineGraph = () => {
         text: "Monthly Expense Forecasting",
       },
     },
+    animation: {
+      onComplete: function() {
+        console.log(this)
+        const ctx = this.ctx;
+        const xScale = this.scales.x;
+        const yScale = this.scales.y;
+  
+        const middleX = (xScale.left + xScale.right) / 2;
+  
+        ctx.save();
+        ctx.beginPath();
+        ctx.setLineDash([5, 5]);
+        ctx.moveTo(middleX, yScale.top); 
+        ctx.lineTo(middleX, yScale.bottom);
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "rgba(0, 0, 0, 0.7)"; 
+        ctx.stroke();
+        ctx.restore();
+      },
+    },
   };
 
   // Plugin for drawing vertical dotted line

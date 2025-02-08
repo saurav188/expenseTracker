@@ -13,7 +13,7 @@ def get_time_series(trns):
     predictions = []
     history = trns.copy()
     for t in range(30):
-        model = ARIMA(history, order=(10,2,1))
+        model = ARIMA(history, order=(12,2,1))
         model_fit = model.fit()
         output = model_fit.forecast()
         yhat = max(output[0],0)
