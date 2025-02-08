@@ -180,7 +180,8 @@ class ExpenseClassification(APIView):
 
     def post(self, request, format= None):
         remarks = request.data['remarks']
-        cat = get_category2(remarks)
+        print(remarks)
+        cat = get_category(remarks)
         cat_id = Category.objects.filter(user_id = request.user).get(name__icontains=cat).id
         return Response({
                 "status":True,
