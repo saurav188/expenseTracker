@@ -56,6 +56,9 @@ def tokenize(input):
 
 def get_category(input):
     sequence = tokenize(input)
+    print(sequence)
+    if len(sequence) == 0:
+        return 'OTHER'
     padded = pad_sequences([sequence], maxlen=max_length, padding=padding_type, truncating=trunc_type)
 
     y = np.array(model.predict(padded).argmax())
