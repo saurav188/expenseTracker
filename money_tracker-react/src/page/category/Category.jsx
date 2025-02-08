@@ -1,27 +1,23 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from "react";
-import NavbarHeader from "../../components/NavbarHeader";
-import Table from "react-bootstrap/Table";
-import getToken from "../../hooks/GetToken";
-import useRunOnce from "../../hooks/useRunOnce";
-import Col from "react-bootstrap/Col";
+import { useFormik } from "formik";
+import React, { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
-import Row from "react-bootstrap/Row";
+import Modal from "react-bootstrap/Modal";
+import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/esm/Button";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
 import {
   FaArrowLeft,
   FaArrowRight,
-  FaFilter,
-  FaRegTrashAlt,
+  FaRegTrashAlt
 } from "react-icons/fa";
-import { MdClose } from "react-icons/md";
-import Modal from "react-bootstrap/Modal";
-import { confirmAlert } from "react-confirm-alert"; // Import
-import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
-import { useFormik } from "formik";
-import * as Yup from "yup";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import * as Yup from "yup";
+import NavbarHeader from "../../components/NavbarHeader";
+import getToken from "../../hooks/GetToken";
+import useRunOnce from "../../hooks/useRunOnce";
 
 function Category() {
   const [Categories, setCategories] = useState([]);
@@ -32,7 +28,7 @@ function Category() {
   const [filterClicked, setFilterClicked] = useState(false);
   const [FormOpen, setFormOpen] = useState(false);
   const [FormId, setFormId] = useState(0);
-  
+
   const category_type = {
     Income: "INC",
     Expense: "EXP",
@@ -45,17 +41,14 @@ function Category() {
     initialValues: {
       name: "",
       description: "",
-      theme_color_hash: "",
       category_type: "EXP",
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Name is required"),
       description: Yup.string().required("Description is required"),
-      theme_color_hash: Yup.string().required("Theme color is required"),
       category_type: Yup.string().required("Category type is required"),
     }),
-    handleSubmit: async (values) => {
-      console.log('**')
+    onSubmit: async (values) => {
       let url = `http://localhost:8000/api/acc/category/`;
       const header = {
         "Content-Type": "application/json",
@@ -74,9 +67,9 @@ function Category() {
         const result = await response.json();
         if (response.ok) {
           toast.success(FormId === 0 ? "Category added successfully" : "Category updated successfully");
-          getData();
-          setFormOpen(false);
-          resetForm();
+          getData();  
+          setFormOpen(false); 
+          formik.resetForm();
         } else {
           Object.keys(result.message || {}).forEach((key) => {
             toast.error(result.message[key][0]);
@@ -106,21 +99,6 @@ function Category() {
       .catch((error) => console.log("Error: " + error.message));
   };
 
-  const filterToggle = () => {
-    document.getElementById("category_filters").classList.toggle("d-none");
-    Array.from(document.getElementById("category_filter_btn").children).forEach((e) => {
-      e.classList.toggle("d-none");
-    });
-  };
-
-  const prevPage = () => {
-    if (Page > 1) setPage(Page - 1);
-  };
-
-  const nextPage = () => {
-    if (Page < MaxPage) setPage(Page + 1);
-  };
-
   const openEditModal = (id) => {
     setFormOpen(true);
     let temp = `http://localhost:8000/api/acc/category/?id=${id}`;
@@ -137,16 +115,10 @@ function Category() {
       .then((data) => {
         formik.setFieldValue("name", data["data"]["name"]);
         formik.setFieldValue("description", data["data"]["description"]);
-        formik.setFieldValue("theme_color_hash", data["data"]["theme_color_hash"]);
         formik.setFieldValue("category_type", data["data"]["category_type"]);
         setFormId(data["data"]["id"]);
       })
       .catch((error) => console.log("Error: " + error.message));
-  };
-
-  const resetForm = () => {
-    setFormId(0);
-    formik.resetForm();
   };
 
   const deleteRecord = (id) => {
@@ -172,6 +144,8 @@ function Category() {
                 if (data["status"]) {
                   getData();
                   toast.success("Category deleted successfully");
+                } else {
+                  toast.error("Error deleting category");
                 }
               })
               .catch((error) => console.log("Error: " + error.message));
@@ -189,144 +163,84 @@ function Category() {
   });
 
   useEffect(() => {
-    if (filterClicked) {
-      setUrl(`http://localhost:8000/api/acc/category/?page=${Page}&name=${Name}`);
-    } else {
-      setUrl(`http://localhost:8000/api/acc/category/?page=${Page}`);
-    }
+    setUrl(`http://localhost:8000/api/acc/category/?page=${Page}`);
+  }, [Page]);
+
+  useEffect(() => {
     getData();
-  }, [Page, url]);
+  }, [url]);
 
   return (
     <>
       <NavbarHeader />
-      <div className="mx-24 my-10 ">
-        <div
-          id="category-modal-container"
-          className={`modal ${FormOpen ? "" : "d-none"}`}
-          style={{
-            display: "block",
-            position: "absolute",
-            backgroundColor: "rgba(255, 255, 255, 0.8)",
-          }}
-        >
-          <Modal.Dialog className="">
-            <Modal.Header>
-              <Modal.Title>{FormId === 0 ? "New Category" : "Edit Category"}</Modal.Title>
-            </Modal.Header>
+      <div className="mx-24 my-10">
+        <Modal show={FormOpen} onHide={() => setFormOpen(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>{FormId === 0 ? "New Category" : "Edit Category"}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form id="category-create-form" onSubmit={formik.handleSubmit}>
+              <Form.Group className="mb-3">
+                <Form.Label>Name</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter Name"
+                  {...formik.getFieldProps("name")}
+                />
+                {formik.touched.name && formik.errors.name ? (
+                  <p className="text-danger">{formik.errors.name}</p>
+                ) : null}
+              </Form.Group>
 
-            <Modal.Body>
-              <Form id="category-create-form" onSubmit={formik.handleSubmit}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Name</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Enter Name"
-                    {...formik.getFieldProps("name")}
-                  />
-                  {formik.touched.name && formik.errors.name ? (
-                    <p className="text-danger">{formik.errors.name}</p>
-                  ) : null}
-                </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Category Type</Form.Label>
+                <Form.Control as="select" {...formik.getFieldProps("category_type")}>
+                  {Object.keys(category_type).map((key) => (
+                    <option key={category_type[key]} value={category_type[key]}>
+                      {key}
+                    </option>
+                  ))}
+                </Form.Control>
+                {formik.touched.category_type && formik.errors.category_type ? (
+                  <p className="text-danger">{formik.errors.category_type}</p>
+                ) : null}
+              </Form.Group>
 
-                <Form.Group className="mb-3">
-                  <Form.Label>Category Type</Form.Label>
-                  <Form.Control
-                    as="select"
-                    {...formik.getFieldProps("category_type")}
-                  >
-                    {Object.keys(category_type).map((key) => (
-                      <option key={category_type[key]} value={category_type[key]}>
-                        {key}
-                      </option>
-                    ))}
-                  </Form.Control>
-                  {formik.touched.category_type && formik.errors.category_type ? (
-                    <p className="text-danger">{formik.errors.category_type}</p>
-                  ) : null}
-                </Form.Group>
-
-                <Form.Group className="mb-3">
-                  <Form.Label>Description</Form.Label>
-                  <Form.Control
-                    as="textarea"
-                    placeholder="Enter Description"
-                    {...formik.getFieldProps("description")}
-                  />
-                  {formik.touched.description && formik.errors.description ? (
-                    <p className="text-danger">{formik.errors.description}</p>
-                  ) : null}
-                </Form.Group>
-              </Form>
-            </Modal.Body>
-
-            <Modal.Footer>
-              <Button
-                variant="secondary"
-                className="rounded-lg"
-                onClick={() => {
-                  setFormOpen(false);
-                  resetForm();
-                }}
-              >
-                Close
-              </Button>
-              <Button variant="primary" className="rounded-lg"  type="submit">
-                Save changes
-              </Button>
-            </Modal.Footer>
-          </Modal.Dialog>
-        </div>
+              <Form.Group className="mb-3">
+                <Form.Label>Description</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  placeholder="Enter Description"
+                  {...formik.getFieldProps("description")}
+                />
+                {formik.touched.description && formik.errors.description ? (
+                  <p className="text-danger">{formik.errors.description}</p>
+                ) : null}
+              </Form.Group>
+              <Modal.Footer>
+                <Button variant="secondary" onClick={() => setFormOpen(false)}>
+                  Close
+                </Button>
+                <Button variant="primary" type="submit">
+                  Save changes
+                </Button>
+              </Modal.Footer>
+            </Form>
+          </Modal.Body>
+        </Modal>
 
         <div>
-          <div className="title-container">
-            <h1>Categories</h1>
-          </div>
-
-          <div className="btn-container d-flex justify-content-between">
-            <Button variant="primary" className="rounded-lg" onClick={() => setFormOpen(true)}>
+          <h1>Categories</h1>
+          <div className="d-flex justify-content-between">
+            <Button variant="primary" className="rounded-lg py-2 my-4" onClick={() => {
+              setFormOpen(true);
+              setFormId(0);
+              formik.resetForm();
+            }}>
               New
             </Button>
-            <Button
-              id="category_filter_btn"
-              variant="secondary"
-              onClick={filterToggle}
-            >
-              <FaFilter />
-              <MdClose className="d-none" />
-            </Button>
           </div>
-
-          <div id="category_filters" className="filter-container d-none p-3 border-top">
-            <Form
-              onSubmit={(ev) => {
-                setFilterClicked(true);
-                setPage(1);
-                ev.preventDefault();
-                setUrl(`http://localhost:8000/api/acc/category/?page=${Page}&name=${Name}`);
-              }}
-              onReset={() => {
-                setFilterClicked(false);
-                setName("");
-                setUrl(`http://localhost:8000/api/acc/category/?page=${Page}`);
-              }}
-            >
-              <Row>
-                <Col>
-                  <Form.Label>Name</Form.Label>
-                  <Form.Control
-                    onChange={(ev) => setName(ev.target.value)}
-                    type="text"
-                    placeholder="Enter name to search"
-                  />
-                </Col>
-              </Row>
-              <Button type="submit" variant="primary">Filter</Button>
-              <Button type="reset" variant="secondary">Reset</Button>
-            </Form>
-          </div>
-
-          <Table striped bordered hover className="w-full">
+          <Table striped bordered hover>
             <thead>
               <tr>
                 <th>Name</th>
@@ -339,8 +253,8 @@ function Category() {
                 <tr key={category.id}>
                   <td onClick={() => openEditModal(category.id)}>{category.name}</td>
                   <td onClick={() => openEditModal(category.id)}>{category.description}</td>
-                  <td width="5px" onClick={() => deleteRecord(category.id)}>
-                    <FaRegTrashAlt />
+                  <td width="5px">
+                    <FaRegTrashAlt onClick={() => deleteRecord(category.id)} />
                   </td>
                 </tr>
               ))}
@@ -350,14 +264,16 @@ function Category() {
           <div className="pagination-btns">
             <div
               className="btn btn-secondary btn-sm pagination-btn"
-              onClick={prevPage}
+              onClick={() => setPage(Page - 1)}
+              disabled={Page === 1}
             >
               <FaArrowLeft />
             </div>
             <div className="curr-page">{Page}</div>
             <div
               className="btn btn-secondary btn-sm pagination-btn"
-              onClick={nextPage}
+              onClick={() => setPage(Page + 1)}
+              disabled={Page >= MaxPage}
             >
               <FaArrowRight />
             </div>

@@ -347,7 +347,7 @@ const handleError = (message) => {
                 <h1>Accounts</h1>
               </div>
               <div className="btn-container d-flex justify-content-between">
-                <Button type="submit" className="rounded-lg" variant="primary" onClick={NewFunction}>
+                <Button type="submit" className="rounded-lg rounded-lg py-2" variant="primary" onClick={NewFunction}>
                   New
                 </Button>
                 <Button
